@@ -16,36 +16,60 @@ export default function LoadingScreen() {
     const duration = 2000;
     const endValue = 100;
     const easeOutQuad = (t: number) => t * (2 - t);
+    
+    let rafId: number;
+    let timeoutId1: NodeJS.Timeout;
+    let timeoutId2: NodeJS.Timeout;
 
     const step = (timestamp: number) => {
-      if (!startTimestamp) startTimestamp = timestamp;
-      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-      const easedProgress = easeOutQuad(progress);
-      const currentValue = Math.floor(easedProgress * endValue);
-      counter.textContent = String(currentValue);
+      try {
+        if (startTimestamp === null) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        const easedProgress = easeOutQuad(progress);
+        const currentValue = Math.floor(easedProgress * endValue);
+        
+        if (counter) {
+          counter.textContent = String(currentValue);
+        }
 
-      if (progress < 1) {
-        window.requestAnimationFrame(step);
-      } else {
-        setTimeout(() => {
-          screen.classList.add('fade-out');
-          document.body.classList.remove('overflow-hidden');
+        if (progress < 1) {
+          rafId = window.requestAnimationFrame(step);
+        } else {
+          timeoutId1 = setTimeout(() => {
+            if (screen) screen.classList.add('fade-out');
+            document.body.classList.remove('overflow-hidden');
 
-          // GSAP Staggered Entrance Animation
-          const tl = gsap.timeline({ defaults: { ease: 'power3.out', duration: 1 } });
-          tl.to('.animate-p1', { autoAlpha: 1, y: 0, stagger: 0.1 }, 0);
-          tl.to('.animate-p2', { autoAlpha: 1, y: 0, stagger: 0.1 }, 0.2);
-          tl.to('.animate-p3', { autoAlpha: 1, y: 0 }, 0.4);
-          tl.to('.animate-p4', { autoAlpha: 1, y: 0 }, 0.6);
+            // GSAP Staggered Entrance Animation
+            try {
+              const tl = gsap.timeline({ defaults: { ease: 'power3.out', duration: 1 } });
+              tl.to('.animate-p1', { autoAlpha: 1, y: 0, stagger: 0.1 }, 0);
+              tl.to('.animate-p2', { autoAlpha: 1, y: 0, stagger: 0.1 }, 0.2);
+              tl.to('.animate-p3', { autoAlpha: 1, y: 0 }, 0.4);
+              tl.to('.animate-p4', { autoAlpha: 1, y: 0 }, 0.6);
+            } catch (e) {
+              console.error("GSAP error:", e);
+            }
 
-          setTimeout(() => {
-            screen.remove();
-          }, 600);
-        }, 300);
+            timeoutId2 = setTimeout(() => {
+              if (screen && screen.parentNode) {
+                screen.parentNode.removeChild(screen);
+              }
+            }, 600);
+          }, 300);
+        }
+      } catch (e) {
+        console.error("Animation step error:", e);
       }
     };
 
-    window.requestAnimationFrame(step);
+    rafId = window.requestAnimationFrame(step);
+    
+    return () => {
+      window.cancelAnimationFrame(rafId);
+      clearTimeout(timeoutId1);
+      clearTimeout(timeoutId2);
+      document.body.classList.remove('overflow-hidden');
+    };
   }, []);
 
   return (
@@ -67,17 +91,16 @@ export default function LoadingScreen() {
         <div className="w-[400px] h-[400px] bg-red-600/5 rounded-full blur-3xl animate-pulse" />
       </div>
 
-      {/* Counter */}
       <div className="relative z-10 text-center flex items-baseline justify-center">
         <span
           ref={counterRef}
           id="loading-counter"
-          className="text-7xl sm:text-9xl font-black text-white tracking-tighter"
-          style={{ fontFamily: "'Syne', sans-serif" }}
+          className="text-7xl sm:text-9xl font-bold text-white tracking-normal"
+          style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
         >
           0
         </span>
-        <span className="text-4xl sm:text-6xl font-bold text-red-600 ml-2">%</span>
+        <span className="text-4xl sm:text-6xl font-bold text-red-600 ml-2" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>%</span>
       </div>
 
       {/* Loading bar */}

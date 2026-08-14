@@ -36,18 +36,16 @@ export default function Navbar() {
   };
 
   const navLinkClass = (section: string) =>
-    `nav-link text-sm font-medium transition-colors ${
-      activeSection === section
-        ? 'text-red-500 underline underline-offset-4 decoration-red-500/40'
-        : 'text-neutral-400 hover:text-white'
+    `nav-link text-sm font-medium transition-colors ${activeSection === section
+      ? 'text-red-500 underline underline-offset-4 decoration-red-500/40'
+      : 'text-neutral-400 hover:text-white'
     }`;
 
   return (
     <nav
       id="main-navbar"
-      className={`nav-glass fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? 'border-b border-neutral-800/50' : ''
-      }`}
+      className={`nav-glass fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'border-b border-neutral-800/50' : ''
+        }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
@@ -67,8 +65,8 @@ export default function Navbar() {
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-8">
             <button onClick={() => scrollTo('#about')} className={navLinkClass('about')} data-section="about">About</button>
-            <button onClick={() => scrollTo('#experience')} className={navLinkClass('experience')} data-section="experience">Experience</button>
             <button onClick={() => scrollTo('#projects')} className={navLinkClass('projects')} data-section="projects">Projects</button>
+            <button onClick={() => scrollTo('#experience')} className={navLinkClass('experience')} data-section="experience">Experience</button>
           </div>
 
           {/* Mobile Hamburger */}
@@ -92,8 +90,8 @@ export default function Navbar() {
         <div className={`mobile-menu md:hidden ${menuOpen ? 'open' : ''}`}>
           <div className="flex flex-col gap-3 pb-4 pt-2">
             <button onClick={() => scrollTo('#about')} className={`${navLinkClass('about')} px-2 py-1.5 text-left`}>About</button>
-            <button onClick={() => scrollTo('#experience')} className={`${navLinkClass('experience')} px-2 py-1.5 text-left`}>Experience</button>
             <button onClick={() => scrollTo('#projects')} className={`${navLinkClass('projects')} px-2 py-1.5 text-left`}>Projects</button>
+            <button onClick={() => scrollTo('#experience')} className={`${navLinkClass('experience')} px-2 py-1.5 text-left`}>Experience</button>
           </div>
         </div>
       </div>
