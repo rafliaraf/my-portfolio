@@ -1,6 +1,6 @@
 # Portfolio — Next.js
 
-Web portofolio pribadi yang dibikin pakai **Next.js** dan **Tailwind CSS**. Tujuannya buat nge-showcase beberapa project UI/UX & Front-End, plus pengalaman kerja sejauh ini.
+A personal web portfolio built using **Next.js** and **Tailwind CSS**. It aims to showcase various UI/UX and front-end projects, along with work experience to date.
 
 ---
 
