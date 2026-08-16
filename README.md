@@ -28,12 +28,12 @@
 
 ## ✨ Key Features
 
-- ⏳ **Custom Preloader** — Smooth loading screen experience.
-- 🌙 **Dark Mode + Neon Red Accent** — Modern and eye-catching design.
-- 🎞️ **Animated Tech Stack Marquee** — Showcase skills dynamically.
-- 📁 **Project Showcase** — Interactive cards with project details.
-- 📅 **Work Experience Timeline** — Clean timeline of professional journey.
-- 📱 **Fully Responsive** — Optimized for mobile and desktop.
+- **Custom Preloader** — Smooth loading screen experience.
+- **Dark Mode + Neon Red Accent** — Modern and eye-catching design.
+- **Animated Tech Stack Marquee** — Showcase skills dynamically.
+- **Project Showcase** — Interactive cards with project details.
+- **Work Experience Timeline** — Clean timeline of professional journey.
+- **Fully Responsive** — Optimized for mobile and desktop.
 
 ---
 
