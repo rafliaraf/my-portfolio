@@ -1,39 +1,59 @@
 # Portfolio — Next.js
 
-A personal web portfolio built using **Next.js** and **Tailwind CSS**. It aims to showcase various UI/UX and front-end projects, along with work experience to date.
+![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=flat&logo=vercel)
+![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat&logo=next.js)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-blue?style=flat&logo=tailwindcss)
+
+> Personal web portfolio built with **Next.js** and **Tailwind CSS**. Showcasing UI/UX projects, front-end works, and professional experience.
+
+🔗 **Live Demo:** [my-portfolio-six-beige-71.vercel.app](https://my-portfolio-six-beige-71.vercel.app)
 
 ---
 
-### 🛠️ Built With
+## 📸 Preview
 
-* **Framework:** Next.js (App Router)
-* **Styling:** Tailwind CSS
-* **Design:** Figma
-* **Tech:** JavaScript, PHP, Laravel, Git
+
 
 ---
 
-### ⚡ Key Features
+## 🛠️ Built With
 
-* Custom loading screen / preloader.
-* Dark mode theme + aksen neon red.
-* Animated tech stack marquee.
-* Interactive showcase project & work experience timeline.
-* Fully responsive (Mobile & Desktop).
+- **Framework:** Next.js (App Router)
+- **Styling:** Tailwind CSS
+- **Design:** Figma
+- **Languages:** JavaScript, PHP
+- **Tools:** Git, Laravel
 
 ---
 
-### 💻 Local Setup
+## ✨ Key Features
+
+- ⏳ **Custom Preloader** — Smooth loading screen experience.
+- 🌙 **Dark Mode + Neon Red Accent** — Modern and eye-catching design.
+- 🎞️ **Animated Tech Stack Marquee** — Showcase skills dynamically.
+- 📁 **Project Showcase** — Interactive cards with project details.
+- 📅 **Work Experience Timeline** — Clean timeline of professional journey.
+- 📱 **Fully Responsive** — Optimized for mobile and desktop.
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js (v18 or higher)
+- npm or yarn
+
+### Installation
 
 ```bash
-# Clone repo
-git clone [https://github.com/rafliaraf/my-portfolio.git](https://github.com/rafliaraf/my-portfolio.git)
+# Clone repository
+git clone https://github.com/rafliaraf/my-portfolio.git
 
-# Masuk folder
+# Navigate to project folder
 cd my-portfolio
 
-# Install dependensi
+# Install dependencies
 npm install
 
-# Jalankan dev server
+# Run development server
 npm run dev
