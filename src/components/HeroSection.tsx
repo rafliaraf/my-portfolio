@@ -1,153 +1,187 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import LineWaves from './LineWaves';
 
 export default function HeroSection() {
-  const scrollTo = (id: string) => {
-    const el = document.querySelector(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
+  const tiltCardRef = useRef<HTMLDivElement>(null);
+  const tiltInnerRef = useRef<HTMLDivElement>(null);
+  const electricCanvasRef = useRef<HTMLCanvasElement>(null);
+  const electricContainerRef = useRef<HTMLDivElement>(null);
+
+  // 3D Tilt Effect
+  useEffect(() => {
+    const card = tiltCardRef.current;
+    const inner = tiltInnerRef.current;
+    if (!card || !inner) return;
+
+    const onMove = (e: MouseEvent) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -12;
+      const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 12;
+      inner.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.03, 1.03, 1.03)`;
+    };
+    const onLeave = () => {
+      inner.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+    };
+    card.addEventListener('mousemove', onMove);
+    card.addEventListener('mouseleave', onLeave);
+    return () => { card.removeEventListener('mousemove', onMove); card.removeEventListener('mouseleave', onLeave); };
+  }, []);
+
+  // Electric Border Animation
+  useEffect(() => {
+    const container = electricContainerRef.current;
+    const elCanvas = electricCanvasRef.current;
+    if (!container || !elCanvas) return;
+    const ctx = elCanvas.getContext('2d')!;
+    const chaos = 0.12, borderRadius = 16, borderOffset = 60;
+    let time = 0, lastFrameTime = 0, width = 0, height = 0;
+
+    const random = (x: number) => (Math.sin(x * 12.9898) * 43758.5453) % 1;
+    const noise2D = (x: number, y: number) => {
+      const i = Math.floor(x), j = Math.floor(y), fx = x-i, fy = y-j;
+      const a=random(i+j*57), b=random(i+1+j*57), c=random(i+(j+1)*57), d=random(i+1+(j+1)*57);
+      const ux=fx*fx*(3-2*fx), uy=fy*fy*(3-2*fy);
+      return a*(1-ux)*(1-uy)+b*ux*(1-uy)+c*(1-ux)*uy+d*ux*uy;
+    };
+    const octNoise = (x: number, t: number, seed: number) => {
+      let y=0, amp=chaos, freq=10;
+      for(let i=0;i<10;i++){y+=amp*noise2D(freq*x+seed*100,t*freq*0.3);freq*=1.6;amp*=0.7;}
+      return y;
+    };
+    const getCorner = (cx: number, cy: number, r: number, sa: number, al: number, p: number) => ({x:cx+r*Math.cos(sa+p*al),y:cy+r*Math.sin(sa+p*al)});
+    const getRectPoint = (t: number, l: number, top: number, w: number, h: number, r: number) => {
+      const sw=w-2*r, sh=h-2*r, ca=(Math.PI*r)/2, perim=2*sw+2*sh+4*ca;
+      const dist=t*perim; let acc=0;
+      if(dist<=acc+sw){return{x:l+r+(dist-acc)/sw*sw,y:top};}acc+=sw;
+      if(dist<=acc+ca){return getCorner(l+w-r,top+r,r,-Math.PI/2,Math.PI/2,(dist-acc)/ca);}acc+=ca;
+      if(dist<=acc+sh){return{x:l+w,y:top+r+(dist-acc)/sh*sh};}acc+=sh;
+      if(dist<=acc+ca){return getCorner(l+w-r,top+h-r,r,0,Math.PI/2,(dist-acc)/ca);}acc+=ca;
+      if(dist<=acc+sw){return{x:l+w-r-(dist-acc)/sw*sw,y:top+h};}acc+=sw;
+      if(dist<=acc+ca){return getCorner(l+r,top+h-r,r,Math.PI/2,Math.PI/2,(dist-acc)/ca);}acc+=ca;
+      if(dist<=acc+sh){return{x:l,y:top+h-r-(dist-acc)/sh*sh};}acc+=sh;
+      return getCorner(l+r,top+r,r,Math.PI,Math.PI/2,(dist-acc)/ca);
+    };
+
+    const updateSize = () => {
+      const rw = container.offsetWidth, rh = container.offsetHeight;
+      const w = rw+borderOffset*2, h = rh+borderOffset*2;
+      const dpr = Math.min(window.devicePixelRatio||1,2);
+      elCanvas.width=w*dpr; elCanvas.height=h*dpr;
+      elCanvas.style.width=`${w}px`; elCanvas.style.height=`${h}px`;
+      ctx.scale(dpr,dpr); return{w,h};
+    };
+    const s = updateSize(); width=s.w; height=s.h;
+
+    let raf: number;
+    const draw = (currentTime: number) => {
+      const dpr = Math.min(window.devicePixelRatio||1,2);
+      time += ((currentTime-lastFrameTime)/1000); lastFrameTime=currentTime;
+      ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,elCanvas.width,elCanvas.height); ctx.scale(dpr,dpr);
+      ctx.strokeStyle='#dc2626'; ctx.lineWidth=1; ctx.lineCap='round'; ctx.lineJoin='round';
+      const l=borderOffset, t=borderOffset, bw=width-2*borderOffset, bh=height-2*borderOffset;
+      const maxR=Math.min(bw,bh)/2, r=Math.min(borderRadius,maxR);
+      const perim=2*(bw+bh)+2*Math.PI*r, count=Math.floor(perim/2);
+      ctx.beginPath();
+      for(let i=0;i<=count;i++){
+        const p=i/count, pt=getRectPoint(p,l,t,bw,bh,r);
+        const dx=octNoise(p*8,time,0)*60, dy=octNoise(p*8,time,1)*60;
+        if(i===0)ctx.moveTo(pt.x+dx,pt.y+dy); else ctx.lineTo(pt.x+dx,pt.y+dy);
+      }
+      ctx.closePath(); ctx.stroke();
+      raf=requestAnimationFrame(draw);
+    };
+    raf=requestAnimationFrame(draw);
+
+    const ro = new ResizeObserver(()=>{const s=updateSize();width=s.w;height=s.h;});
+    ro.observe(container);
+    return ()=>{cancelAnimationFrame(raf);ro.disconnect();};
+  }, []);
 
   return (
-    <section id="about" className="relative min-h-[92vh] flex items-center justify-center overflow-hidden bg-dark-primary pt-24 pb-16 sm:pt-28 sm:pb-20">
-      
-      {/* Dynamic Background Effect */}
-      <div className="absolute inset-0 z-0 opacity-40">
+    <section
+      id="about"
+      className="relative min-h-screen flex items-center overflow-hidden grid-bg animate-zoom-in"
+    >
+      <div className="absolute inset-0 z-0">
         <LineWaves
-          speed={0.25}
-          lineCount={30}
-          lineColor="#200505"
-          waveAmplitude={0.7}
-          waveFrequency={0.003}
-          warpIntensity={0.8}
+          speed={0.3}
+          innerLineCount={32}
+          outerLineCount={36}
+          warpIntensity={1}
           rotation={-45}
           edgeFadeWidth={0}
           colorCycleSpeed={1}
-          brightness={1.3}
-          color1="#dc2626"
-          color2="#991b1b"
-          color3="#dc2626"
+          brightness={1.5}
+          color1="#ff0000"
+          color2="#ff4444"
+          color3="#ff0000"
           enableMouseInteraction
-          mouseInfluence={1.5}
+          mouseInfluence={2}
           className="w-full h-full absolute inset-0"
         />
       </div>
-      <div className="absolute inset-0 bg-gradient-to-b from-dark-primary via-dark-primary/60 to-dark-primary pointer-events-none z-0" />
+      <div className="absolute inset-0 bg-gradient-to-b from-dark-primary via-transparent to-dark-primary pointer-events-none z-0" />
 
-      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-24 pb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
-          {/* Left Column: Clean, Polished Portrait Card (5 cols) */}
-          <div className="lg:col-span-5 flex justify-center" data-aos="fade-right">
-            <div className="relative group">
-              {/* Subtle Red Ambient Glow behind photo */}
-              <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-red-600/30 to-red-900/20 blur-xl opacity-70 group-hover:opacity-100 transition-opacity duration-700" />
-              
-              {/* Photo Frame */}
-              <div className="relative w-[280px] h-[360px] sm:w-[320px] sm:h-[420px] rounded-2xl overflow-hidden border border-neutral-800/90 bg-neutral-900 shadow-2xl">
-                <Image
-                  src={require('../../public/images/hero-photo.png')}
-                  alt="Muhammad Rafli Aolia Ansori"
-                  fill
-                  className="object-cover object-top filter contrast-[1.04] brightness-95 group-hover:scale-102 transition-transform duration-700 ease-out"
-                  priority
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-dark-primary via-transparent to-transparent opacity-80" />
-                
-                {/* Floating Bottom Tag */}
-                <div className="absolute bottom-4 left-4 right-4 p-3 rounded-xl bg-neutral-950/85 backdrop-blur-md border border-neutral-800/80 flex items-center justify-between">
-                  <div>
-                    <p className="text-xs font-bold text-white leading-tight">Muhammad Rafli</p>
-                    <p className="text-[11px] text-red-400">UI/UX & Front-End</p>
+          {/* Left — Photo */}
+          <div className="flex justify-center lg:justify-start" data-aos="zoom-in" data-aos-duration="1200">
+            <div ref={tiltCardRef} className="tilt-card cursor-pointer">
+              <div ref={tiltInnerRef} className="tilt-card-inner relative">
+                <div
+                  ref={electricContainerRef}
+                  className="relative overflow-visible isolate mx-auto"
+                  style={{ '--electric-border-color': '#dc2626', borderRadius: '24px' } as React.CSSProperties}
+                >
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-[2]">
+                    <canvas ref={electricCanvasRef} className="block" />
                   </div>
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" />
+                  <div className="absolute inset-0 rounded-[inherit] pointer-events-none z-0">
+                    <div className="absolute inset-0 rounded-[inherit] pointer-events-none" style={{ border: '2px solid rgba(220,38,38,0.5)', filter: 'blur(1px)' }} />
+                    <div className="absolute inset-0 rounded-[inherit] pointer-events-none" style={{ border: '1px solid #dc2626', filter: 'blur(3px)' }} />
+                    <div className="absolute inset-0 rounded-[inherit] pointer-events-none -z-[1] scale-[1.05] opacity-20" style={{ filter: 'blur(30px)', background: 'linear-gradient(-30deg,#dc2626,transparent,#dc2626)' }} />
+                  </div>
+                  <div className="relative rounded-[inherit] z-[1] overflow-hidden bg-dark-secondary w-[260px] h-[340px] sm:w-[320px] sm:h-[420px] lg:w-[380px] lg:h-[500px] shadow-2xl shadow-black/50">
+                    <Image
+                      src={require('../../public/images/hero-photo.png')}
+                      alt="Muhammad Rafli Aolia Ansori — Portrait"
+                      fill
+                      className="object-cover object-top filter contrast-[1.05] brightness-95"
+                      priority
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-dark-primary via-dark-primary/60 to-transparent" />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Clean, Structured Executive Bio (7 cols) */}
-          <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left" data-aos="fade-left">
-            
-            {/* Status Pill */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-neutral-900/90 border border-neutral-800 text-xs font-medium text-neutral-300 mb-5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-              <span>Available for Hire & Engineering Roles</span>
-            </div>
-
-            {/* Clean, Crisp Heading */}
+          {/* Right — Text */}
+          <div className="text-center lg:text-left mt-4 lg:mt-0 flex flex-col items-center lg:items-start z-10">
             <h1
-              className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-[1.15]"
+              className="flex flex-col text-[5.5vw] sm:text-2xl md:text-3xl lg:text-3xl xl:text-4xl font-extrabold tracking-tight text-white leading-[1.1]"
               style={{ fontFamily: "'Syne', sans-serif" }}
             >
-              MUHAMMAD RAFLI <br className="hidden sm:inline" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-400">
-                AOLIA ANSORI
+              <span className="block animate-p1 text-transparent bg-clip-text bg-gradient-to-r from-white via-neutral-200 to-neutral-400 whitespace-nowrap">
+                MUHAMMAD RAFLI
+              </span>
+              <span className="block animate-p1 mt-1 lg:mt-2 whitespace-nowrap">
+                AOLIA <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-600 drop-shadow-[0_0_15px_rgba(239,68,68,0.3)]">ANSORI</span>
               </span>
             </h1>
-
-            {/* Subtitle / Role */}
-            <p className="text-base sm:text-lg font-semibold text-neutral-200 mt-3">
-              UI/UX Designer & Front-End Developer
+            
+            <p className="mt-6 text-base sm:text-lg text-white/90 max-w-lg leading-relaxed font-medium animate-p2 text-center lg:text-left">
+              UI/UX Designer & Front-End Developer. Crafting Digital Public Services & Modern Web Interfaces with precision and aesthetics.
             </p>
 
-            {/* Narrative Bio */}
-            <p className="text-sm sm:text-base text-neutral-400 mt-4 leading-relaxed max-w-xl">
-              Specialized in engineering accessible digital public services, responsive web applications, and physical brand merchandise. Proven track record contributing to municipal enterprise portals (SIPP Kota Tasikmalaya) and commercial product lines.
-            </p>
-
-            {/* Clean Key Highlights Grid */}
-            <div className="grid grid-cols-3 gap-4 sm:gap-6 mt-7 py-4 border-y border-neutral-800/80 w-full max-w-lg">
-              <div>
-                <p className="text-xl sm:text-2xl font-bold text-white" style={{ fontFamily: "'Syne', sans-serif" }}>
-                  SIPP Portal
-                </p>
-                <p className="text-xs text-neutral-400 mt-0.5">Municipal Gov Redesign</p>
-              </div>
-              <div className="border-x border-neutral-800/80 px-2 sm:px-4">
-                <p className="text-xl sm:text-2xl font-bold text-white" style={{ fontFamily: "'Syne', sans-serif" }}>
-                  Design & Dev
-                </p>
-                <p className="text-xs text-neutral-400 mt-0.5">Figma to Laravel/Tailwind</p>
-              </div>
-              <div>
-                <p className="text-xl sm:text-2xl font-bold text-white" style={{ fontFamily: "'Syne', sans-serif" }}>
-                  Print & DTF
-                </p>
-                <p className="text-xs text-neutral-400 mt-0.5">Industrial Production</p>
-              </div>
-            </div>
-
-            {/* Professional Connect Links */}
-            <div className="flex items-center justify-center lg:justify-start gap-4 mt-8">
-              <a
-                href="https://www.linkedin.com/in/muhammadrafliaoliaa/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs sm:text-sm font-semibold shadow-[0_0_20px_rgba(220,38,38,0.35)] flex items-center gap-2 transition-all duration-300"
-              >
-                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                  <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.25c-.9 0-1.63.73-1.63 1.63 0 .9.73 1.63 1.63 1.63.9 0 1.63-.73 1.63-1.63 0-.9-.73-1.63-1.63-1.63Z" />
-                </svg>
-                <span>Connect on LinkedIn</span>
-              </a>
-
-              <a
-                href="https://github.com/rafliaraf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-5 py-2.5 rounded-xl bg-neutral-900/90 hover:bg-neutral-800 text-neutral-300 hover:text-white border border-neutral-800 text-xs sm:text-sm font-semibold flex items-center gap-2 transition-all duration-300"
-              >
-                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                  <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
-                </svg>
-                <span>GitHub</span>
-              </a>
-            </div>
 
           </div>
-
         </div>
       </div>
     </section>
