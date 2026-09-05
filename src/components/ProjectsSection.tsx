@@ -5,7 +5,6 @@ import Image from 'next/image';
 
 interface Project {
   id: string;
-  badge: { label: string; color: string; dot: string };
   date?: string;
   title: string;
   category: string;
@@ -21,7 +20,6 @@ interface Project {
 const projects: Project[] = [
   {
     id: 'sippn',
-    badge: { label: 'Completed', color: 'badge-completed', dot: 'bg-emerald-400' },
     date: 'Aug 2026 – Present',
     title: 'SIPP KOTA TASIKMALAYA',
     category: 'UI/UX & Web Development',
@@ -41,7 +39,6 @@ const projects: Project[] = [
   },
   {
     id: 'fixyoufit',
-    badge: { label: 'Completed', color: 'badge-completed', dot: 'bg-yellow-400' },
     date: 'Jan 2024 – Jul 2024',
     title: 'Fixyoufit.id Apparel Artwork',
     category: 'Graphic Design & Merchandise',
@@ -59,7 +56,6 @@ const projects: Project[] = [
   },
   {
     id: 'r2sports',
-    badge: { label: 'Completed', color: 'badge-completed', dot: 'bg-yellow-400' },
     date: 'Dec 2023 – Feb 2024',
     title: 'R2Sports Camo Series Hoodie',
     category: 'Graphic Design & Print Production',
@@ -152,14 +148,13 @@ export default function ProjectsSection() {
                   {/* Project Details Content */}
                   <div className={`lg:col-span-6 flex flex-col justify-between ${isReversed ? 'lg:order-1' : 'lg:order-2'}`}>
                     <div>
-                      {/* Badge & Date */}
+                      {/* Meta info: Category & Timeline */}
                       <div className="flex flex-wrap items-center gap-3 mb-3">
-                        <span className={`badge ${project.badge.color}`}>
-                          <span className={`inline-block w-1.5 h-1.5 rounded-full ${project.badge.dot}`} />
-                          {project.badge.label}
+                        <span className="text-xs font-semibold tracking-wider uppercase text-red-500 bg-red-500/10 border border-red-500/20 px-3 py-1 rounded-full">
+                          {project.category}
                         </span>
                         {project.date && (
-                          <span className="text-xs text-neutral-500 font-medium">{project.date}</span>
+                          <span className="text-xs text-neutral-400 font-medium tracking-wide">{project.date}</span>
                         )}
                       </div>
 
