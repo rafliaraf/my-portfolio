@@ -149,10 +149,10 @@ export default function HeroSection() {
                   </div>
                   <div className="relative rounded-[inherit] z-[1] overflow-hidden bg-dark-secondary w-[260px] h-[340px] sm:w-[320px] sm:h-[420px] lg:w-[380px] lg:h-[500px] shadow-2xl shadow-black/50">
                     <Image
-                      src={require('../../public/images/hero-photo.png')}
+                      src="/images/profile-new.jpg"
                       alt="Muhammad Rafli Aolia Ansori — Portrait"
                       fill
-                      className="object-cover object-top filter contrast-[1.05] brightness-95"
+                      className="object-cover object-[center_20%] filter contrast-[1.05] brightness-95"
                       priority
                     />
                     <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-dark-primary via-dark-primary/60 to-transparent" />
