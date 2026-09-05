@@ -67,51 +67,63 @@ export default function HeroSection() {
       return getCorner(l+r,top+r,r,Math.PI,Math.PI/2,(dist-acc)/ca);
     };
 
-    const updateSize = () => {
-      const rw = container.offsetWidth, rh = container.offsetHeight;
-      const w = rw+borderOffset*2, h = rh+borderOffset*2;
-      const dpr = Math.min(window.devicePixelRatio||1,2);
-      elCanvas.width=w*dpr; elCanvas.height=h*dpr;
-      elCanvas.style.width=`${w}px`; elCanvas.style.height=`${h}px`;
-      ctx.scale(dpr,dpr); return{w,h};
-    };
-    const s = updateSize(); width=s.w; height=s.h;
-
-    let raf: number;
-    const draw = (currentTime: number) => {
-      const dpr = Math.min(window.devicePixelRatio||1,2);
-      time += ((currentTime-lastFrameTime)/1000); lastFrameTime=currentTime;
-      ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,elCanvas.width,elCanvas.height); ctx.scale(dpr,dpr);
-      ctx.strokeStyle='#dc2626'; ctx.lineWidth=1; ctx.lineCap='round'; ctx.lineJoin='round';
-      const l=borderOffset, t=borderOffset, bw=width-2*borderOffset, bh=height-2*borderOffset;
-      const maxR=Math.min(bw,bh)/2, r=Math.min(borderRadius,maxR);
-      const perim=2*(bw+bh)+2*Math.PI*r, count=Math.floor(perim/2);
-      ctx.beginPath();
-      for(let i=0;i<=count;i++){
-        const p=i/count, pt=getRectPoint(p,l,t,bw,bh,r);
-        const dx=octNoise(p*8,time,0)*60, dy=octNoise(p*8,time,1)*60;
-        if(i===0)ctx.moveTo(pt.x+dx,pt.y+dy); else ctx.lineTo(pt.x+dx,pt.y+dy);
+    let animId: number;
+    const render = (now: number) => {
+      const dt = lastFrameTime ? (now - lastFrameTime) / 1000 : 0;
+      lastFrameTime = now;
+      time += dt * 0.4;
+      const r = container.getBoundingClientRect();
+      const nw = Math.round(r.width + borderOffset*2), nh = Math.round(r.height + borderOffset*2);
+      if (nw !== width || nh !== height) {
+        width = nw; height = nh;
+        elCanvas.width = width * 2; elCanvas.height = height * 2;
+        elCanvas.style.width = width + 'px'; elCanvas.style.height = height + 'px';
       }
-      ctx.closePath(); ctx.stroke();
-      raf=requestAnimationFrame(draw);
+      ctx.save();
+      ctx.scale(2, 2);
+      ctx.clearRect(0, 0, width, height);
+      const l = borderOffset, top = borderOffset, w = r.width, h = r.height;
+      const pts: {x:number,y:number}[] = [];
+      const N = 100;
+      for(let i=0;i<N;i++){
+        const t = i/N;
+        const pt = getRectPoint(t,l,top,w,h,borderRadius);
+        const cx=l+w/2, cy=top+h/2;
+        const dx=pt.x-cx, dy=pt.y-cy, dist=Math.hypot(dx,dy)||1;
+        const disp = octNoise(t,time,1)*24;
+        pts.push({x:pt.x+dx/dist*disp,y:pt.y+dy/dist*disp});
+      }
+      ctx.beginPath();
+      ctx.moveTo(pts[0].x,pts[0].y);
+      for(let i=1;i<pts.length;i++)ctx.lineTo(pts[i].x,pts[i].y);
+      ctx.closePath();
+      ctx.strokeStyle = '#dc2626';
+      ctx.lineWidth = 1.5;
+      ctx.shadowColor = '#dc2626';
+      ctx.shadowBlur = 10;
+      ctx.stroke();
+      ctx.restore();
+      animId = requestAnimationFrame(render);
     };
-    raf=requestAnimationFrame(draw);
-
-    const ro = new ResizeObserver(()=>{const s=updateSize();width=s.w;height=s.h;});
-    ro.observe(container);
-    return ()=>{cancelAnimationFrame(raf);ro.disconnect();};
+    animId = requestAnimationFrame(render);
+    return () => cancelAnimationFrame(animId);
   }, []);
 
+  const scrollTo = (id: string) => {
+    const el = document.querySelector(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   return (
-    <section
-      id="about"
-      className="relative min-h-screen flex items-center overflow-hidden grid-bg animate-zoom-in"
-    >
+    <section id="about" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-dark-primary">
+      {/* Dynamic Background Effect */}
       <div className="absolute inset-0 z-0">
         <LineWaves
           speed={0.3}
-          innerLineCount={32}
-          outerLineCount={36}
+          lineCount={35}
+          lineColor="#200505"
+          waveAmplitude={0.8}
+          waveFrequency={0.003}
           warpIntensity={1}
           rotation={-45}
           edgeFadeWidth={0}
@@ -127,11 +139,11 @@ export default function HeroSection() {
       </div>
       <div className="absolute inset-0 bg-gradient-to-b from-dark-primary via-transparent to-dark-primary pointer-events-none z-0" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-24 pb-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-28 pb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
 
-          {/* Left — Photo */}
-          <div className="flex justify-center lg:justify-start" data-aos="zoom-in" data-aos-duration="1200">
+          {/* Left Column: Portrait Showcase (5 cols) */}
+          <div className="lg:col-span-5 flex justify-center lg:justify-start" data-aos="zoom-in" data-aos-duration="1200">
             <div ref={tiltCardRef} className="tilt-card cursor-pointer">
               <div ref={tiltInnerRef} className="tilt-card-inner relative">
                 <div
@@ -147,7 +159,7 @@ export default function HeroSection() {
                     <div className="absolute inset-0 rounded-[inherit] pointer-events-none" style={{ border: '1px solid #dc2626', filter: 'blur(3px)' }} />
                     <div className="absolute inset-0 rounded-[inherit] pointer-events-none -z-[1] scale-[1.05] opacity-20" style={{ filter: 'blur(30px)', background: 'linear-gradient(-30deg,#dc2626,transparent,#dc2626)' }} />
                   </div>
-                  <div className="relative rounded-[inherit] z-[1] overflow-hidden bg-dark-secondary w-[260px] h-[340px] sm:w-[320px] sm:h-[420px] lg:w-[380px] lg:h-[500px] shadow-2xl shadow-black/50">
+                  <div className="relative rounded-[inherit] z-[1] overflow-hidden bg-dark-secondary w-[260px] h-[340px] sm:w-[320px] sm:h-[420px] lg:w-[360px] lg:h-[480px] shadow-2xl shadow-black/50">
                     <Image
                       src={require('../../public/images/hero-photo.png')}
                       alt="Muhammad Rafli Aolia Ansori — Portrait"
@@ -162,26 +174,93 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* Right — Text */}
-          <div className="text-center lg:text-left mt-4 lg:mt-0 flex flex-col items-center lg:items-start z-10">
+          {/* Right Column: High-Impact Typography & Metric Badges (7 cols) */}
+          <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left z-10">
+            
+            {/* Status Pill Indicator */}
+            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-neutral-900/90 border border-neutral-800 text-xs font-medium text-neutral-300 mb-6 shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span>Available for Projects & Engineering Roles</span>
+            </div>
+
             <h1
-              className="flex flex-col text-[5.5vw] sm:text-2xl md:text-3xl lg:text-3xl xl:text-4xl font-extrabold tracking-tight text-white leading-[1.1]"
+              className="flex flex-col text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.08]"
               style={{ fontFamily: "'Syne', sans-serif" }}
             >
-              <span className="block animate-p1 text-transparent bg-clip-text bg-gradient-to-r from-white via-neutral-200 to-neutral-400 whitespace-nowrap">
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-white via-neutral-200 to-neutral-400">
                 MUHAMMAD RAFLI
               </span>
-              <span className="block animate-p1 mt-1 lg:mt-2 whitespace-nowrap">
-                AOLIA <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-600 drop-shadow-[0_0_15px_rgba(239,68,68,0.3)]">ANSORI</span>
+              <span className="block mt-1 sm:mt-2">
+                AOLIA <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-600 drop-shadow-[0_0_20px_rgba(239,68,68,0.35)]">ANSORI</span>
               </span>
             </h1>
             
-            <p className="mt-6 text-base sm:text-lg text-white/90 max-w-lg leading-relaxed font-medium animate-p2 text-center lg:text-left">
-              UI/UX Designer & Front-End Developer. Crafting Digital Public Services & Modern Web Interfaces with precision and aesthetics.
+            <p className="mt-5 text-base sm:text-lg text-neutral-300 max-w-xl leading-relaxed font-normal">
+              UI/UX Designer & Front-End Developer bridging human-centered interfaces with resilient, performant web architectures. Delivering enterprise-grade municipal portals and bespoke brand solutions.
             </p>
 
+            {/* Quick Metrics Bar */}
+            <div className="mt-8 grid grid-cols-3 gap-6 sm:gap-10 border-y border-neutral-800/80 py-5 w-full max-w-xl">
+              <div>
+                <div className="text-2xl sm:text-3xl font-bold text-white tracking-tight" style={{ fontFamily: "'Syne', sans-serif" }}>
+                  3+
+                </div>
+                <div className="text-[11px] sm:text-xs text-neutral-400 uppercase tracking-wider mt-0.5">
+                  Years Design & Dev
+                </div>
+              </div>
+              <div className="border-x border-neutral-800/80 px-4 sm:px-6">
+                <div className="text-2xl sm:text-3xl font-bold text-white tracking-tight" style={{ fontFamily: "'Syne', sans-serif" }}>
+                  100%
+                </div>
+                <div className="text-[11px] sm:text-xs text-neutral-400 uppercase tracking-wider mt-0.5">
+                  Delivery Rate
+                </div>
+              </div>
+              <div>
+                <div className="text-2xl sm:text-3xl font-bold text-white tracking-tight" style={{ fontFamily: "'Syne', sans-serif" }}>
+                  Gov & Retail
+                </div>
+                <div className="text-[11px] sm:text-xs text-neutral-400 uppercase tracking-wider mt-0.5">
+                  Sector Experience
+                </div>
+              </div>
+            </div>
+
+            {/* Call To Action Buttons */}
+            <div className="mt-8 flex flex-wrap items-center justify-center lg:justify-start gap-4">
+              <button
+                onClick={() => scrollTo('#projects')}
+                className="px-6 py-3 rounded-xl bg-red-600 hover:bg-red-500 text-white text-sm font-semibold shadow-[0_0_25px_rgba(220,38,38,0.4)] hover:shadow-[0_0_35px_rgba(220,38,38,0.6)] transition-all duration-300 flex items-center gap-2"
+              >
+                <span>Explore Featured Works</span>
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
+              </button>
+              
+              <button
+                onClick={() => scrollTo('#experience')}
+                className="px-6 py-3 rounded-xl bg-neutral-900/90 hover:bg-neutral-800 text-neutral-300 hover:text-white text-sm font-semibold border border-neutral-800 hover:border-neutral-700 transition-all duration-300"
+              >
+                View Track Record
+              </button>
+
+              <a
+                href="https://www.linkedin.com/in/muhammadrafliaoliaa/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 rounded-xl bg-neutral-900/90 hover:bg-neutral-800 text-neutral-400 hover:text-white border border-neutral-800 transition-colors"
+                aria-label="LinkedIn Profile"
+              >
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.25c-.9 0-1.63.73-1.63 1.63 0 .9.73 1.63 1.63 1.63.9 0 1.63-.73 1.63-1.63 0-.9-.73-1.63-1.63-1.63Z" />
+                </svg>
+              </a>
+            </div>
 
           </div>
+
         </div>
       </div>
     </section>
