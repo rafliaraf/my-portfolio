@@ -67,6 +67,7 @@ export default function Navbar() {
             <button onClick={() => scrollTo('#about')} className={navLinkClass('about')} data-section="about">About</button>
             <button onClick={() => scrollTo('#projects')} className={navLinkClass('projects')} data-section="projects">Projects</button>
             <button onClick={() => scrollTo('#experience')} className={navLinkClass('experience')} data-section="experience">Experience</button>
+            <button onClick={() => scrollTo('#certifications')} className={navLinkClass('certifications')} data-section="certifications">Certifications</button>
           </div>
 
           {/* Mobile Hamburger */}
@@ -92,6 +93,7 @@ export default function Navbar() {
             <button onClick={() => scrollTo('#about')} className={`${navLinkClass('about')} px-2 py-1.5 text-left`}>About</button>
             <button onClick={() => scrollTo('#projects')} className={`${navLinkClass('projects')} px-2 py-1.5 text-left`}>Projects</button>
             <button onClick={() => scrollTo('#experience')} className={`${navLinkClass('experience')} px-2 py-1.5 text-left`}>Experience</button>
+            <button onClick={() => scrollTo('#certifications')} className={`${navLinkClass('certifications')} px-2 py-1.5 text-left`}>Certifications</button>
           </div>
         </div>
       </div>

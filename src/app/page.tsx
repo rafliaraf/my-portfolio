@@ -8,6 +8,7 @@ import HeroSection from '@/components/HeroSection';
 import TechTicker from '@/components/TechTicker';
 import ProjectsSection from '@/components/ProjectsSection';
 import ExperienceSection from '@/components/ExperienceSection';
+import CertificationsSection from '@/components/CertificationsSection';
 
 export default function Home() {
   useEffect(() => {
@@ -28,6 +29,7 @@ export default function Home() {
         <TechTicker />
         <ProjectsSection />
         <ExperienceSection />
+        <CertificationsSection />
       </main>
       <footer className="border-t border-neutral-800/60 bg-dark-primary py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
