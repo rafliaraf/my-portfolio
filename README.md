@@ -28,12 +28,13 @@
 
 ## ✨ Key Features
 
-- **Custom Preloader** — Smooth loading screen experience.
-- **Dark Mode + Neon Red Accent** — Modern and eye-catching design.
-- **Animated Tech Stack Marquee** — Showcase skills dynamically.
-- **Project Showcase** — Interactive cards with project details.
-- **Work Experience Timeline** — Clean timeline of professional journey.
-- **Fully Responsive** — Optimized for mobile and desktop.
+- **Custom Preloader** — Interactive numerical counter loading experience.
+- **Dark Mode + Crimson Neon Glow** — Sleek, aesthetic dark-mode developer design.
+- **Categorized Tech Stack Ticker** — Categorized marquee showcasing skills and tools.
+- **Featured Projects Showcase** — Split-view editorial showcase with full-screen lightbox inspection.
+- **Executive Experience Milestones** — Structured work history detailing government & commercial projects.
+- **Licenses & Certifications** — Verified credentials with authentic LinkedIn list view and direct verification links.
+- **Fully Responsive** — Fluid typography and adaptive layouts for all screen viewports.
 
 ---
 
