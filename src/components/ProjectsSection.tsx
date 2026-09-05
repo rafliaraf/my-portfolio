@@ -21,7 +21,7 @@ interface Project {
 const projects: Project[] = [
   {
     id: 'sippn',
-    badge: { label: '85% Completed', color: 'badge-completed', dot: 'bg-yellow-400' },
+    badge: { label: 'Completed', color: 'badge-completed', dot: 'bg-emerald-400' },
     date: 'Aug 2026 – Present',
     title: 'SIPP KOTA TASIKMALAYA',
     category: 'UI/UX & Web Development',

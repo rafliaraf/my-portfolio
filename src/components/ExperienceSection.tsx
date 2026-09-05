@@ -7,7 +7,7 @@ const experiences = [
     company: 'Dinas Komunikasi dan Informatika Kota Tasikmalaya',
     type: 'Apprenticeship · APTIKA Division · On-site',
     description:
-      'Serving within the Informatics Application Division (APTIKA), contributing to UI/UX Design and Front-End Web Development for the official SIPP portal redesign — currently at 85% development & refinement stage.',
+      'Serving within the Informatics Application Division (APTIKA), contributing to UI/UX Design and Front-End Web Development for the official SIPP portal redesign and implementation.',
     bullets: [
       'Collaborated on UI/UX mockups in Figma and translated designs into responsive layouts.',
       'Assisted in data entry and content integration for regional government agency (OPD) public service data into the portal.',
