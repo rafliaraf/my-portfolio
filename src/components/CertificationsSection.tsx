@@ -11,6 +11,8 @@ interface Certification {
   expiryDate?: string;
   credentialId?: string;
   credentialUrl?: string;
+  grade?: string;
+  period?: string;
   skills?: string[];
   mediaThumbnail?: {
     title: string;
@@ -22,12 +24,14 @@ interface Certification {
 const certifications: Certification[] = [
   {
     id: 'pkl-istimewa-jaya',
-    title: 'Praktik Kerja Lapangan (PKL) - Digital Istimewa Jaya Printing',
-    issuer: 'ISTIMEWA JAYA DIGITAL PRINTING PUSAT',
+    title: 'Praktik Kerja Lapangan (PKL)',
+    issuer: 'CV. Istimewa Jaya Digital Printing · SMK Negeri 3 Tasikmalaya',
     issueDate: 'Issued Oct 2022',
-    skills: ['CorelDRAW', 'Quality Control', '+2 skills'],
+    grade: 'Sangat Baik',
+    period: '25 Juli s.d 06 Oktober 2022 (3 Bulan)',
+    skills: ['CorelDRAW', 'Digital Printing Operations', 'Quality Control', 'Finishing & Production'],
     mediaThumbnail: {
-      title: 'Praktik Kerja Lapangan (PKL) - Digital Istimewa Jaya Printing',
+      title: 'Sertifikat Praktik Kerja Lapangan (PKL) - CV. Istimewa Jaya Digital Printing',
       image: '/images/cert-pkl.jpg',
     },
   },
@@ -113,8 +117,8 @@ export default function CertificationsSection() {
                 </h3>
                 <p className="text-xs sm:text-sm text-neutral-300 font-medium mt-0.5">{cert.issuer}</p>
 
-                {/* Issued & Expiry */}
-                <div className="mt-1 text-xs text-neutral-500">
+                {/* Issued, Expiry, & Period */}
+                <div className="mt-1 text-xs text-neutral-500 flex flex-wrap items-center gap-y-1">
                   <span>{cert.issueDate}</span>
                   {cert.expiryDate && (
                     <>
@@ -122,7 +126,24 @@ export default function CertificationsSection() {
                       <span>{cert.expiryDate}</span>
                     </>
                   )}
+                  {cert.period && (
+                    <>
+                      <span className="mx-1.5">·</span>
+                      <span className="text-neutral-400">{cert.period}</span>
+                    </>
+                  )}
                 </div>
+
+                {/* Grade / Hasil (e.g. Sangat Baik) */}
+                {cert.grade && (
+                  <div className="mt-2 flex items-center gap-2">
+                    <span className="text-[11px] font-mono text-neutral-400">Hasil:</span>
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      {cert.grade}
+                    </span>
+                  </div>
+                )}
 
                 {/* Credential ID */}
                 {cert.credentialId && (
