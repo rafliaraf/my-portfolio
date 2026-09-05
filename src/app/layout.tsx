@@ -17,10 +17,10 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Muhammad Rafli — UI/UX Designer & Front-End Developer",
+  title: "Muhammad Rafli — Portfolio",
   description:
-    "Muhammad Rafli Aolia Ansori — Information Systems Student, UI/UX Designer & Front-End Developer. Crafting Digital Public Services & Modern Web Interfaces.",
-  keywords: ["UI/UX Designer", "Front-End Developer", "Laravel", "Tailwind CSS", "Portfolio", "Muhammad Rafli"],
+    "Portfolio of Muhammad Rafli Aolia Ansori — Designing & Building High-Impact Digital Experiences, UI/UX Systems & Web Interfaces.",
+  keywords: ["Muhammad Rafli", "Portfolio", "UI/UX Design", "Web Development", "Graphic Design"],
   authors: [{ name: "Muhammad Rafli Aolia Ansori" }],
 };
 
