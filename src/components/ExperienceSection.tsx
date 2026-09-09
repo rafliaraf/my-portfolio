@@ -15,20 +15,36 @@ interface ExperienceItem {
 const experiences: ExperienceItem[] = [
 
   {
-    id: 'fixyoufit-r2',
-    role: 'Lead Graphic & Apparel Designer',
-    organization: 'Fixyoufit.id & R2Sports',
+    id: 'fixyoufit',
+    role: 'Graphic Designer & Merchandise Specialist',
+    organization: 'Fixyoufit.id',
     location: 'Tasikmalaya, Jawa Barat · On-site',
-    period: 'Jan 2022 – Jul 2024',
-    type: 'Commercial Creative & Production',
+    period: 'Jan 2024 – Jul 2024',
+    type: 'Commercial Creative & Production · Full-time',
     summary:
-      'Orchestrated digital marketing visual assets, e-commerce storefront imagery, and physical merchandise printing lines for active sportswear and streetwear brands.',
+      'Orchestrated digital marketing visual assets, e-commerce storefront imagery, and physical merchandise printing lines for active streetwear brands.',
     highlights: [
-      'Engineered print-ready vector typography, sublimation patterns, and marketing collateral using CorelDRAW & Photoshop.',
-      'Supervised end-to-end Direct Transfer Film (DTF) and high-density fabric production workflows with stringent quality control.',
+      'Engineered print-ready vector typography, promotional graphics, and apparel artworks using CorelDRAW & Photoshop.',
+      'Supervised end-to-end Direct Transfer Film (DTF) printing to guarantee crisp colors and durability.',
       'Enhanced product catalog click-through rates across digital marketplaces like Shopee.',
     ],
-    technologies: ['CorelDRAW', 'Adobe Photoshop', 'DTF Printing', 'Sublimation Prep', 'Visual Branding'],
+    technologies: ['CorelDRAW', 'Adobe Photoshop', 'DTF Printing', 'E-Commerce Marketing', 'Visual Branding'],
+  },
+  {
+    id: 'r2sports',
+    role: 'Graphic Designer & Sublimation Production',
+    organization: 'R2Sports',
+    location: 'Tasikmalaya, Jawa Barat · On-site',
+    period: 'Dec 2023 – Feb 2024',
+    type: 'Apparel Design & Production · Part-time',
+    summary:
+      'Designed technical sportswear and outdoor camo pattern apparel with end-to-end responsibility from digital artwork preparation to large-format sublimation print.',
+    highlights: [
+      'Created intricate camouflage seamless patterns and hoodie jersey apparel layouts.',
+      'Prepared color separations, pre-press checks, cutting, and assembly workflows.',
+      'Managed industrial printing equipment and maintained efficient production uptime.',
+    ],
+    technologies: ['CorelDRAW', 'Adobe Photoshop', 'Sublimation Printing', 'Pattern Design', 'Pre-Press'],
   },
   {
     id: 'istimewa-jaya',
