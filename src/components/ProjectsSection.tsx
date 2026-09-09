@@ -154,32 +154,51 @@ export default function ProjectsSection() {
                   <div className={`lg:col-span-6 ${isReversed ? 'lg:order-2' : 'lg:order-1'}`}>
                     <div
                       onClick={() => setSelectedImage(project)}
-                      className="relative rounded-2xl overflow-hidden border border-neutral-800 bg-neutral-950 aspect-[4/3] sm:aspect-[16/10] shadow-2xl cursor-pointer group/img"
+                      className="relative rounded-2xl overflow-hidden border border-neutral-800 bg-neutral-950 aspect-[4/3] sm:aspect-[16/10] shadow-2xl cursor-pointer group/img flex flex-col"
                     >
-                      <Image
-                        src={project.image}
-                        alt={project.title}
-                        fill
-                        className="object-contain p-3 group-hover/img:scale-105 transition-transform duration-700 ease-out"
-                        loading="lazy"
-                      />
+                      {/* Browser Window Header Mockup for Web Projects */}
+                      {project.id === 'sipp' && (
+                        <div className="flex items-center gap-2 px-3 py-2 bg-neutral-900/90 border-b border-neutral-800 z-10 shrink-0">
+                          <div className="flex items-center gap-1.5">
+                            <span className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
+                            <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/80" />
+                            <span className="w-2.5 h-2.5 rounded-full bg-green-500/80" />
+                          </div>
+                          <div className="flex-1 mx-2 px-2.5 py-0.5 rounded-md bg-neutral-950/70 border border-neutral-800 text-[10px] text-neutral-400 font-mono truncate flex items-center gap-1.5">
+                            <span className="text-emerald-500">🔒</span>
+                            <span>sipp.tasikmalayakota.go.id</span>
+                          </div>
+                        </div>
+                      )}
 
-                      {/* Subtle Vignette Gradient */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-dark-primary/60 via-transparent to-transparent pointer-events-none" />
+                      <div className="relative flex-1 w-full h-full overflow-hidden">
+                        <Image
+                          src={project.image}
+                          alt={project.title}
+                          fill
+                          className={`group-hover/img:scale-105 transition-transform duration-700 ease-out ${
+                            project.id === 'sipp' ? 'object-cover object-top' : 'object-contain p-3'
+                          }`}
+                          loading="lazy"
+                        />
 
-                      {/* Click-to-zoom badge indicator */}
-                      <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-10 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/70 backdrop-blur-md text-white text-xs font-medium border border-white/10 group-hover/img:border-red-500/50 group-hover/img:bg-red-600 transition-all duration-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
-                        </svg>
-                        <span>View Full Image</span>
-                      </div>
+                        {/* Subtle Vignette Gradient */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-dark-primary/60 via-transparent to-transparent pointer-events-none" />
 
-                      {/* Category Badge */}
-                      <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10">
-                        <span className="text-[11px] font-medium px-3 py-1 rounded-full bg-black/75 backdrop-blur-md text-red-400 border border-red-500/30">
-                          {project.category}
-                        </span>
+                        {/* Click-to-zoom badge indicator */}
+                        <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-10 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/70 backdrop-blur-md text-white text-xs font-medium border border-white/10 group-hover/img:border-red-500/50 group-hover/img:bg-red-600 transition-all duration-300">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+                          </svg>
+                          <span>View Full Image</span>
+                        </div>
+
+                        {/* Category Badge */}
+                        <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10">
+                          <span className="text-[11px] font-medium px-3 py-1 rounded-full bg-black/75 backdrop-blur-md text-red-400 border border-red-500/30">
+                            {project.category}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
