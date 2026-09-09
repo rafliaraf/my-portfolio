@@ -13,22 +13,7 @@ interface ExperienceItem {
 }
 
 const experiences: ExperienceItem[] = [
-  {
-    id: 'sipp-intern',
-    role: 'UI/UX Designer & Front-End Developer',
-    organization: 'Dinas Komunikasi dan Informatika Kota Tasikmalaya',
-    location: 'Tasikmalaya, Jawa Barat · On-site',
-    period: 'Aug 2026 – Present',
-    type: 'Government Apprenticeship · APTIKA Division',
-    summary:
-      'Spearheaded the UI/UX architecture and modern front-end overhaul of SIPP (Sistem Informasi Pelayanan Publik), enhancing citizen accessibility across regional public services.',
-    highlights: [
-      'Architected user flows, high-fidelity responsive wireframes, and design systems within Figma.',
-      'Slicing mockups into accessible, pixel-perfect Laravel Blade templates powered by Tailwind CSS.',
-      'Curated, standardized, and integrated comprehensive regional agency (OPD) public service datasets into the portal system.',
-    ],
-    technologies: ['Figma', 'Tailwind CSS', 'Laravel Blade', 'Data Engineering', 'JavaScript'],
-  },
+
   {
     id: 'fixyoufit-r2',
     role: 'Lead Graphic & Apparel Designer',
