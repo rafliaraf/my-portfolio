@@ -19,7 +19,26 @@ interface Project {
 
 const projects: Project[] = [
   {
-    id: 'sippn',
+    id: 'simpus-satusehat',
+    date: 'Sep 2026',
+    title: 'SIMPUS – SATUSEHAT Integration (HL7 FHIR R4)',
+    category: 'Backend & API Integration',
+    company: 'SATUSEHAT Sandbox Kemenkes RI',
+    type: 'HealthTech Interoperability · API Testing · Independent Project',
+    description:
+      'Engineered and validated bridging integration between Puskesmas Information System (SIMPUS) and SATUSEHAT Kemenkes Sandbox based on international HL7 FHIR R4 standards. Covered secure OAuth 2.0 authentication, patient encounter lifecycle, and clinical diagnosis mapping.',
+    responsibilities: [
+      { label: 'OAuth 2.0 Token Bridging:', text: 'Implemented secure Client Credentials Flow for automated token generation and expiry management.' },
+      { label: 'FHIR Encounter Lifecycle:', text: 'Synchronized multi-stage encounter states (arrived, in-progress, finished) via RESTful POST/PUT requests.' },
+      { label: 'Diagnosis & Condition Mapping:', text: 'Mapped clinical conditions using standardized ICD-10 codes associated with patient IHS numbers and encounter references.' },
+      { label: 'Error Handling & Resilience:', text: 'Engineered fallback handlers for HTTP 504 Gateway Timeouts and validated FHIR OperationOutcome errors with persistent logging.' },
+      { label: 'Automated Testing:', text: 'Executed end-to-end integration test suites using automated CLI test runners and Postman Collections.' },
+    ],
+    tags: ['HL7 FHIR R4', 'SATUSEHAT API', 'OAuth 2.0', 'Node.js', 'Postman', 'ICD-10', 'HealthTech'],
+    image: '/images/project-satusehat.png',
+  },
+  {
+    id: 'sipp',
     date: 'Aug 2026 – Present',
     title: 'SIPP KOTA TASIKMALAYA',
     category: 'UI/UX & Web Development',
@@ -79,7 +98,7 @@ export default function ProjectsSection() {
   return (
     <section id="projects" className="relative py-20 sm:py-28">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16" data-aos="fade-up">
           <p className="text-xs sm:text-sm font-semibold text-red-500 uppercase tracking-widest mb-2">
@@ -110,7 +129,7 @@ export default function ProjectsSection() {
                 <div className="absolute inset-0 bg-red-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
                 <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-                  
+
                   {/* Visual Image Showcase (Takes 6 or 7 columns) */}
                   <div className={`lg:col-span-6 ${isReversed ? 'lg:order-2' : 'lg:order-1'}`}>
                     <div
@@ -124,7 +143,7 @@ export default function ProjectsSection() {
                         className="object-contain p-3 group-hover/img:scale-105 transition-transform duration-700 ease-out"
                         loading="lazy"
                       />
-                      
+
                       {/* Subtle Vignette Gradient */}
                       <div className="absolute inset-0 bg-gradient-to-t from-dark-primary/60 via-transparent to-transparent pointer-events-none" />
 
