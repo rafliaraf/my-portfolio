@@ -43,63 +43,63 @@ export default function HeroSection() {
 
     const random = (x: number) => (Math.sin(x * 12.9898) * 43758.5453) % 1;
     const noise2D = (x: number, y: number) => {
-      const i = Math.floor(x), j = Math.floor(y), fx = x-i, fy = y-j;
-      const a=random(i+j*57), b=random(i+1+j*57), c=random(i+(j+1)*57), d=random(i+1+(j+1)*57);
-      const ux=fx*fx*(3-2*fx), uy=fy*fy*(3-2*fy);
-      return a*(1-ux)*(1-uy)+b*ux*(1-uy)+c*(1-ux)*uy+d*ux*uy;
+      const i = Math.floor(x), j = Math.floor(y), fx = x - i, fy = y - j;
+      const a = random(i + j * 57), b = random(i + 1 + j * 57), c = random(i + (j + 1) * 57), d = random(i + 1 + (j + 1) * 57);
+      const ux = fx * fx * (3 - 2 * fx), uy = fy * fy * (3 - 2 * fy);
+      return a * (1 - ux) * (1 - uy) + b * ux * (1 - uy) + c * (1 - ux) * uy + d * ux * uy;
     };
     const octNoise = (x: number, t: number, seed: number) => {
-      let y=0, amp=chaos, freq=10;
-      for(let i=0;i<10;i++){y+=amp*noise2D(freq*x+seed*100,t*freq*0.3);freq*=1.6;amp*=0.7;}
+      let y = 0, amp = chaos, freq = 10;
+      for (let i = 0; i < 10; i++) { y += amp * noise2D(freq * x + seed * 100, t * freq * 0.3); freq *= 1.6; amp *= 0.7; }
       return y;
     };
-    const getCorner = (cx: number, cy: number, r: number, sa: number, al: number, p: number) => ({x:cx+r*Math.cos(sa+p*al),y:cy+r*Math.sin(sa+p*al)});
+    const getCorner = (cx: number, cy: number, r: number, sa: number, al: number, p: number) => ({ x: cx + r * Math.cos(sa + p * al), y: cy + r * Math.sin(sa + p * al) });
     const getRectPoint = (t: number, l: number, top: number, w: number, h: number, r: number) => {
-      const sw=w-2*r, sh=h-2*r, ca=(Math.PI*r)/2, perim=2*sw+2*sh+4*ca;
-      const dist=t*perim; let acc=0;
-      if(dist<=acc+sw){return{x:l+r+(dist-acc)/sw*sw,y:top};}acc+=sw;
-      if(dist<=acc+ca){return getCorner(l+w-r,top+r,r,-Math.PI/2,Math.PI/2,(dist-acc)/ca);}acc+=ca;
-      if(dist<=acc+sh){return{x:l+w,y:top+r+(dist-acc)/sh*sh};}acc+=sh;
-      if(dist<=acc+ca){return getCorner(l+w-r,top+h-r,r,0,Math.PI/2,(dist-acc)/ca);}acc+=ca;
-      if(dist<=acc+sw){return{x:l+w-r-(dist-acc)/sw*sw,y:top+h};}acc+=sw;
-      if(dist<=acc+ca){return getCorner(l+r,top+h-r,r,Math.PI/2,Math.PI/2,(dist-acc)/ca);}acc+=ca;
-      if(dist<=acc+sh){return{x:l,y:top+h-r-(dist-acc)/sh*sh};}acc+=sh;
-      return getCorner(l+r,top+r,r,Math.PI,Math.PI/2,(dist-acc)/ca);
+      const sw = w - 2 * r, sh = h - 2 * r, ca = (Math.PI * r) / 2, perim = 2 * sw + 2 * sh + 4 * ca;
+      const dist = t * perim; let acc = 0;
+      if (dist <= acc + sw) { return { x: l + r + (dist - acc) / sw * sw, y: top }; } acc += sw;
+      if (dist <= acc + ca) { return getCorner(l + w - r, top + r, r, -Math.PI / 2, Math.PI / 2, (dist - acc) / ca); } acc += ca;
+      if (dist <= acc + sh) { return { x: l + w, y: top + r + (dist - acc) / sh * sh }; } acc += sh;
+      if (dist <= acc + ca) { return getCorner(l + w - r, top + h - r, r, 0, Math.PI / 2, (dist - acc) / ca); } acc += ca;
+      if (dist <= acc + sw) { return { x: l + w - r - (dist - acc) / sw * sw, y: top + h }; } acc += sw;
+      if (dist <= acc + ca) { return getCorner(l + r, top + h - r, r, Math.PI / 2, Math.PI / 2, (dist - acc) / ca); } acc += ca;
+      if (dist <= acc + sh) { return { x: l, y: top + h - r - (dist - acc) / sh * sh }; } acc += sh;
+      return getCorner(l + r, top + r, r, Math.PI, Math.PI / 2, (dist - acc) / ca);
     };
 
     const updateSize = () => {
       const rw = container.offsetWidth, rh = container.offsetHeight;
-      const w = rw+borderOffset*2, h = rh+borderOffset*2;
-      const dpr = Math.min(window.devicePixelRatio||1,2);
-      elCanvas.width=w*dpr; elCanvas.height=h*dpr;
-      elCanvas.style.width=`${w}px`; elCanvas.style.height=`${h}px`;
-      ctx.scale(dpr,dpr); return{w,h};
+      const w = rw + borderOffset * 2, h = rh + borderOffset * 2;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      elCanvas.width = w * dpr; elCanvas.height = h * dpr;
+      elCanvas.style.width = `${w}px`; elCanvas.style.height = `${h}px`;
+      ctx.scale(dpr, dpr); return { w, h };
     };
-    const s = updateSize(); width=s.w; height=s.h;
+    const s = updateSize(); width = s.w; height = s.h;
 
     let raf: number;
     const draw = (currentTime: number) => {
-      const dpr = Math.min(window.devicePixelRatio||1,2);
-      time += ((currentTime-lastFrameTime)/1000); lastFrameTime=currentTime;
-      ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,elCanvas.width,elCanvas.height); ctx.scale(dpr,dpr);
-      ctx.strokeStyle='#dc2626'; ctx.lineWidth=1; ctx.lineCap='round'; ctx.lineJoin='round';
-      const l=borderOffset, t=borderOffset, bw=width-2*borderOffset, bh=height-2*borderOffset;
-      const maxR=Math.min(bw,bh)/2, r=Math.min(borderRadius,maxR);
-      const perim=2*(bw+bh)+2*Math.PI*r, count=Math.floor(perim/2);
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      time += ((currentTime - lastFrameTime) / 1000); lastFrameTime = currentTime;
+      ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, elCanvas.width, elCanvas.height); ctx.scale(dpr, dpr);
+      ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 1; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      const l = borderOffset, t = borderOffset, bw = width - 2 * borderOffset, bh = height - 2 * borderOffset;
+      const maxR = Math.min(bw, bh) / 2, r = Math.min(borderRadius, maxR);
+      const perim = 2 * (bw + bh) + 2 * Math.PI * r, count = Math.floor(perim / 2);
       ctx.beginPath();
-      for(let i=0;i<=count;i++){
-        const p=i/count, pt=getRectPoint(p,l,t,bw,bh,r);
-        const dx=octNoise(p*8,time,0)*60, dy=octNoise(p*8,time,1)*60;
-        if(i===0)ctx.moveTo(pt.x+dx,pt.y+dy); else ctx.lineTo(pt.x+dx,pt.y+dy);
+      for (let i = 0; i <= count; i++) {
+        const p = i / count, pt = getRectPoint(p, l, t, bw, bh, r);
+        const dx = octNoise(p * 8, time, 0) * 60, dy = octNoise(p * 8, time, 1) * 60;
+        if (i === 0) ctx.moveTo(pt.x + dx, pt.y + dy); else ctx.lineTo(pt.x + dx, pt.y + dy);
       }
       ctx.closePath(); ctx.stroke();
-      raf=requestAnimationFrame(draw);
+      raf = requestAnimationFrame(draw);
     };
-    raf=requestAnimationFrame(draw);
+    raf = requestAnimationFrame(draw);
 
-    const ro = new ResizeObserver(()=>{const s=updateSize();width=s.w;height=s.h;});
+    const ro = new ResizeObserver(() => { const s = updateSize(); width = s.w; height = s.h; });
     ro.observe(container);
-    return ()=>{cancelAnimationFrame(raf);ro.disconnect();};
+    return () => { cancelAnimationFrame(raf); ro.disconnect(); };
   }, []);
 
   return (
@@ -171,11 +171,12 @@ export default function HeroSection() {
               <span className="block animate-p1 text-transparent bg-clip-text bg-gradient-to-r from-white via-neutral-200 to-neutral-400 whitespace-nowrap">
                 MUHAMMAD RAFLI
               </span>
+
               <span className="block animate-p1 mt-1 lg:mt-2 whitespace-nowrap">
                 AOLIA <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-600 drop-shadow-[0_0_15px_rgba(239,68,68,0.3)]">ANSORI</span>
               </span>
             </h1>
-            
+
             <p className="mt-6 text-base sm:text-lg text-white/90 max-w-lg leading-relaxed font-medium animate-p2 text-center lg:text-left">
               UI/UX Designer & Front-End Developer. Crafting Digital Public Services & Modern Web Interfaces with precision and aesthetics.
             </p>

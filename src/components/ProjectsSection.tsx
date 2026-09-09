@@ -19,6 +19,26 @@ interface Project {
 
 const projects: Project[] = [
   {
+    id: 'satu-rumah',
+    date: 'Aug 2026 – Present',
+    title: 'SATU RUMAH PERWASKIM – Site Plan & PSU System',
+    category: 'System Architecture & QA Testing',
+    company: 'Dinas Perumahan dan Kawasan Permukiman Kota Tasikmalaya',
+    type: 'Dual-Client Architecture · Project Management · Lead QA',
+    description:
+      'Engineered an integrated municipal digital governance platform for residential site plan legalization and public utilities (PSU) monitoring. Designed with a headless Laravel 12 REST API and multi-role Flutter cross-platform architecture serving Developers, Desk Verifiers, and Field Surveyors.',
+    responsibilities: [
+      { label: 'Project Management & SDLC:', text: 'Authored end-to-end technical documentation (BRD, SRS, Data Dictionary, and 9-week agile implementation roadmap).' },
+      { label: 'Dual-Client Architecture:', text: 'Designed API integration between Laravel 12 Sanctum token authentication and Flutter client with custom state management.' },
+      { label: 'Technical Document Engine:', text: 'Architected multipart CAD (.dwg/.dxf) & PDF upload workflows with server-side MIME validation and automated inspection report (BAP) PDF generation.' },
+      { label: 'Comprehensive QA Testing:', text: 'Formulated Blackbox test suites, boundary input validations, and executed multi-stakeholder User Acceptance Testing (UAT).' },
+      { label: 'Multi-Stage Workflow:', text: 'Implemented rigid verification state machine transitions from administrative check, technical review, field survey, to final endorsement.' },
+    ],
+    tags: ['Project Management', 'Quality Assurance', 'Laravel 12', 'Flutter', 'REST API', 'Sanctum', 'Blackbox Testing', 'UAT'],
+    image: '/images/project-saturumah.png',
+  },
+
+  {
     id: 'simpus-satusehat',
     date: 'Sep 2026',
     title: 'SIMPUS – SATUSEHAT Integration (HL7 FHIR R4)',
