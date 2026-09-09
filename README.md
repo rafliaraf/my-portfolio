@@ -8,13 +8,7 @@
 
 🔗 **Live Demo:** [my-portfolio-six-beige-71.vercel.app](https://my-portfolio-six-beige-71.vercel.app)
 
----
 
-## 📸 Preview
-
-
-
----
 
 ## 🛠️ Built With
 
