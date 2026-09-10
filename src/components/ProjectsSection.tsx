@@ -217,7 +217,9 @@ export default function ProjectsSection() {
                           alt={project.title}
                           fill
                           className={`group-hover/img:scale-105 transition-transform duration-700 ease-out ${
-                            project.id === 'sipp' ? 'object-cover object-top' : 'object-contain p-3'
+                            project.id.startsWith('simpus') || project.id === 'sipp' || project.id === 'satu-rumah'
+                              ? 'object-cover object-center'
+                              : 'object-contain p-3'
                           }`}
                           loading="lazy"
                         />
