@@ -58,6 +58,46 @@ const projects: Project[] = [
     image: '/images/project-satusehat.png',
   },
   {
+    id: 'simpus-billing-kasir',
+    date: 'Sep 2026',
+    title: 'SIMPUS – Billing, Cashier & Invoice API Testing',
+    category: 'API Testing & Quality Assurance',
+    company: 'Department of Communication and Informatics, Tasikmalaya City',
+    type: 'Apprenticeship · APTIKA Division · QA Automation',
+    description:
+      'Engineered comprehensive automated blackbox API test suites for the SIMPUS billing and cashier checkout subsystem. Covered consultation tariff calculations, drug prescriptions, multi-payment reconciliation, and double-charge idempotency safety.',
+    responsibilities: [
+      { label: 'Tariff & Invoice Calculation:', text: 'Tested itemized invoice calculations aggregating registration, doctor consultations, and pharmacy prescription lines.' },
+      { label: 'Cashier Checkout Reconciliation:', text: 'Verified cash tender logic (exact change calculation, underpayment rejection) and QRIS digital payment confirmation.' },
+      { label: 'Idempotency Protection:', text: 'Validated transaction deduplication via Idempotency-Key headers to prevent duplicate charges from network retry anomalies.' },
+      { label: 'Official Receipt Generation:', text: 'Asserted uniqueness and format structure of digital payment receipts (KWT/PKM/YYYYMM/XXXX).' },
+      { label: 'Automated Test Suites:', text: 'Constructed Postman collections and Python runner scripts with 100% passed test assertions.' },
+    ],
+    tags: ['API Testing', 'Postman', 'Python', 'Billing System', 'Idempotency', 'Quality Assurance', 'SIMPUS'],
+    link: 'https://github.com/rafliaraf/simpus-billing-api-testing',
+    image: '/images/project-satusehat.png',
+  },
+  {
+    id: 'simpus-antrian-reservasi',
+    date: 'Sep 2026',
+    title: 'SIMPUS – Kiosk Queue & Doctor Appointment API Testing',
+    category: 'API Testing & Quality Assurance',
+    company: 'Department of Communication and Informatics, Tasikmalaya City',
+    type: 'Apprenticeship · APTIKA Division · QA Automation',
+    description:
+      'Designed and executed end-to-end blackbox API test suites for the SIMPUS Loket/Kiosk queue ticketing and doctor appointment reservation system. Validated multi-unit queue prefixes, desk call lifecycle transitions, and enforced rigorous quota boundary limits.',
+    responsibilities: [
+      { label: 'Kiosk Queue Dispatching:', text: 'Tested multi-clinic ticketing endpoints across Umum (A), Gigi (B), KIA (C), and Lansia (D) with sequence integrity and queue counter validations.' },
+      { label: 'Calling State Transitions:', text: 'Verified real-time lifecycle status transitions from MENUNGGU to DIPANGGIL and SELESAI/DILEWATI via PATCH endpoints with desk assignment.' },
+      { label: 'Doctor Schedule Catalog:', text: 'Validated dynamic schedule retrieval and real-time remaining quota tracking with clinic query filtering.' },
+      { label: 'Strict Quota Limit Validation:', text: 'Executed quota exhaustion tests, confirming robust HTTP 422 Unprocessable Entity responses when doctor reservation quotas were fully booked.' },
+      { label: 'Automated Postman Test Suites:', text: 'Built complete Postman collections with automated pre-request scripts and assertions achieving 100% test pass rate.' },
+    ],
+    tags: ['API Testing', 'Postman', 'Python', 'REST API', 'Quality Assurance', 'HTTP 422', 'SIMPUS'],
+    link: 'https://github.com/rafliaraf/uji-kiosk-antrian-reservasi-puskesmas',
+    image: '/images/project-satusehat.png',
+  },
+  {
     id: 'sipp',
     date: 'Aug 2026 – Present',
     title: 'SIPP KOTA TASIKMALAYA',
@@ -262,7 +302,7 @@ export default function ProjectsSection() {
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-2 text-sm text-red-500 hover:text-red-400 font-semibold transition-colors group/link"
                         >
-                          Visit Live Site
+                          {project.link.includes('github.com') ? 'View on GitHub Repository' : 'Visit Live Site'}
                           <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7v10" />
                           </svg>

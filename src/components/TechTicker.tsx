@@ -86,6 +86,22 @@ export default function TechTicker() {
       ),
     },
     {
+      name: 'Postman & API QA',
+      icon: (
+        <div className="w-5 h-5 rounded-full bg-[#FF6C37] flex items-center justify-center shrink-0">
+          <span className="text-[10px] font-black text-white leading-none">PM</span>
+        </div>
+      ),
+    },
+    {
+      name: 'Python',
+      icon: (
+        <div className="w-5 h-5 rounded bg-[#3776AB] flex items-center justify-center shrink-0">
+          <span className="text-[10px] font-black text-[#FFD43B] leading-none">Py</span>
+        </div>
+      ),
+    },
+    {
       name: 'Git & GitHub',
       icon: (
         <svg className="w-5 h-5 text-[#F05032] shrink-0" viewBox="0 0 24 24" fill="currentColor">

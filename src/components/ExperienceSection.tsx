@@ -13,7 +13,23 @@ interface ExperienceItem {
 }
 
 const experiences: ExperienceItem[] = [
-
+  {
+    id: 'diskominfo-aptika',
+    role: 'Software QA & API Testing Specialist (Apprenticeship)',
+    organization: 'Department of Communication and Informatics, Tasikmalaya City',
+    location: 'Tasikmalaya, Jawa Barat · On-site',
+    period: 'Aug 2026 – Present',
+    type: 'Public Sector Apprenticeship · APTIKA Division',
+    summary:
+      'Conducted automated API quality assurance, blackbox functional verification, and interoperability testing across municipal health and public service platforms (SIMPUS & SIPP).',
+    highlights: [
+      'Executed automated test suites for SIMPUS Kiosk Queue Dispatching (Umum, Gigi, KIA, Lansia) and real-time lifecycle status transitions.',
+      'Validated doctor appointment booking quotas with strict boundary testing, asserting HTTP 422 Unprocessable Entity quota rejection mechanisms.',
+      'Created standardized Postman Collections with automated assertion scripts, achieving 100% test pass rate for public health API endpoints.',
+      'Collaborated on SIPP Kota Tasikmalaya portal modernization, UI/UX overhaul, and regional data service curation.',
+    ],
+    technologies: ['API Testing', 'Postman', 'Python', 'REST API', 'QA Automation', 'HTTP 422', 'Figma', 'Tailwind CSS'],
+  },
   {
     id: 'fixyoufit',
     role: 'Graphic Designer & Merchandise Specialist',

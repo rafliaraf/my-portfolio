@@ -180,7 +180,7 @@ export default function HeroSection() {
             <p className="mt-6 text-base sm:text-lg text-white/90 max-w-xl leading-relaxed font-medium animate-p2 text-center lg:text-left">
               <span className="text-red-400 font-semibold">Information Systems Student</span>
               <span className="mx-2 text-neutral-500">|</span>
-              <span className="text-neutral-200">UI/UX Designer &amp; Front-End Developer</span>
+              <span className="text-neutral-200">Graphic Designer &amp; Front-End Developer</span>
               <span className="mx-2 text-neutral-500">|</span>
               <span className="text-neutral-300">Crafting Digital Public Services &amp; Modern Web Interfaces</span>
             </p>
