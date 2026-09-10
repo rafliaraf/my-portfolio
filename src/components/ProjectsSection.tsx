@@ -75,7 +75,7 @@ const projects: Project[] = [
     ],
     tags: ['API Testing', 'Postman', 'Python', 'Billing System', 'Idempotency', 'Quality Assurance', 'SIMPUS'],
     link: 'https://github.com/rafliaraf/simpus-billing-api-testing',
-    image: '/images/project-satusehat.png',
+    image: '/images/project-simpus-billing.jpg',
   },
   {
     id: 'simpus-antrian-reservasi',
@@ -95,7 +95,7 @@ const projects: Project[] = [
     ],
     tags: ['API Testing', 'Postman', 'Python', 'REST API', 'Quality Assurance', 'HTTP 422', 'SIMPUS'],
     link: 'https://github.com/rafliaraf/uji-kiosk-antrian-reservasi-puskesmas',
-    image: '/images/project-satusehat.png',
+    image: '/images/project-simpus-antrian.jpg',
   },
   {
     id: 'sipp',
