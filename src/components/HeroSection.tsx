@@ -7,22 +7,22 @@ export default function HeroSection() {
   // Track scroll inside the window for clean, fluid fade out on scroll down, and reappearance on scroll up
   const { scrollY } = useScroll();
 
-  // Opacity transitions from 1 (top of page) to 0 (around 280px scroll)
-  const opacity = useTransform(scrollY, [0, 260], [1, 0]);
-  // Smooth subtle upward movement as user scrolls down
-  const y = useTransform(scrollY, [0, 260], [0, -45]);
-  // Subtle scale reduction for premium cinematic parallax
-  const scale = useTransform(scrollY, [0, 260], [1, 0.96]);
+  // Smooth cinematic fade-out, upward float, and scale as user scrolls towards the next section
+  // Extends smoothly over 450px of scroll for a gradual, natural transition
+  const opacity = useTransform(scrollY, [0, 380, 520], [1, 0.4, 0]);
+  const y = useTransform(scrollY, [0, 520], [0, -90]);
+  const scale = useTransform(scrollY, [0, 520], [1, 0.90]);
+  const filter = useTransform(scrollY, [0, 380, 520], ['blur(0px)', 'blur(2px)', 'blur(8px)']);
 
   return (
     <section
       id="about"
       className="relative w-full min-h-screen min-h-[100dvh] flex flex-col justify-between bg-transparent overflow-hidden px-5 sm:px-10 lg:px-16 select-none pt-24 sm:pt-28 pb-10 sm:pb-14"
     >
-      {/* ── Scroll-Linked Motion Container ── */}
+      {/* ── Scroll-Linked Motion Container with cinematic fade, upward drift, and defocus blur ── */}
       <motion.div
-        style={{ opacity, y, scale }}
-        className="relative z-10 w-full max-w-6xl mx-auto flex-1 flex flex-col justify-between"
+        style={{ opacity, y, scale, filter }}
+        className="relative z-10 w-full max-w-6xl mx-auto flex-1 flex flex-col justify-between will-change-transform"
       >
         {/* ── Top Bar: Clean Greeting Meta ── */}
         <div className="w-full pt-3 sm:pt-4">
