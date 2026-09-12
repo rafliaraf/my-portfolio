@@ -5,75 +5,108 @@ import { useEffect, useState } from 'react';
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState('about');
+  const [activeSection, setActiveSection] = useState('ABOUT');
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      setScrolled(window.scrollY > 40);
 
-      const scrollY = window.scrollY + 120;
-      const sections = document.querySelectorAll('section[id]');
-      sections.forEach((section) => {
-        const el = section as HTMLElement;
-        const sectionTop = el.offsetTop;
-        const sectionHeight = el.offsetHeight;
-        const sectionId = el.getAttribute('id') || '';
-        if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
-          setActiveSection(sectionId);
+      // Section scroll spy
+      const sections = [
+        { id: 'about', label: 'ABOUT' },
+        { id: 'projects', label: 'PROJECTS' },
+        { id: 'experience', label: 'EXPERIENCE' },
+        { id: 'certifications', label: 'CERTIFICATIONS' },
+      ];
+
+      const scrollPos = window.scrollY + 200;
+
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const el = document.getElementById(sections[i].id);
+        if (el && scrollPos >= el.offsetTop) {
+          setActiveSection(sections[i].label);
+          break;
         }
-      });
+      }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const scrollTo = (id: string) => {
+  const scrollTo = (id: string, label: string) => {
+    setActiveSection(label);
     const el = document.querySelector(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
     setMenuOpen(false);
   };
 
-  const navLinkClass = (section: string) =>
-    `nav-link text-sm font-medium transition-colors ${activeSection === section
-      ? 'text-red-500 underline underline-offset-4 decoration-red-500/40'
-      : 'text-neutral-400 hover:text-white'
-    }`;
+  const navItems = [
+    { label: 'ABOUT', target: '#about' },
+    { label: 'PROJECTS', target: '#projects' },
+    { label: 'EXPERIENCE', target: '#experience' },
+    { label: 'CERTIFICATIONS', target: '#certifications' },
+  ];
 
   return (
     <nav
       id="main-navbar"
-      className={`nav-glass fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'border-b border-neutral-800/50' : ''
-        }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 select-none ${
+        scrolled
+          ? 'bg-black/90 backdrop-blur-md border-b border-neutral-900/80 shadow-2xl py-3.5'
+          : 'bg-gradient-to-b from-black/90 via-black/40 to-transparent py-5'
+      }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
+      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
+        <div className="flex items-center justify-between">
+          {/* Brand Logo - Bold Red All-Caps with Original Name */}
           <button
-            onClick={() => scrollTo('#about')}
-            className="flex items-center group animate-p1"
+            onClick={() => scrollTo('#about', 'ABOUT')}
+            className="flex items-center group cursor-pointer focus:outline-none"
           >
             <span
-              className="text-white font-bold text-lg tracking-tight"
-              style={{ fontFamily: "'Syne', sans-serif" }}
+              className="text-[#991b1b] hover:text-red-500 font-bold text-lg sm:text-xl md:text-2xl tracking-[0.14em] uppercase transition-colors duration-300 drop-shadow-[0_0_15px_rgba(185,28,28,0.4)]"
+              style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700 }}
             >
-              Muhammad Rafli
+              MUHAMMAD RAFLI
             </span>
           </button>
 
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-8">
-            <button onClick={() => scrollTo('#about')} className={navLinkClass('about')} data-section="about">About</button>
-            <button onClick={() => scrollTo('#projects')} className={navLinkClass('projects')} data-section="projects">Projects</button>
-            <button onClick={() => scrollTo('#experience')} className={navLinkClass('experience')} data-section="experience">Experience</button>
-            <button onClick={() => scrollTo('#certifications')} className={navLinkClass('certifications')} data-section="certifications">Certifications</button>
+          {/* Desktop Nav Items with Red Active Glow Indicator */}
+          <div className="hidden md:flex items-center gap-6 lg:gap-10">
+            {navItems.map((item) => {
+              const isActive = activeSection === item.label;
+              return (
+                <button
+                  key={item.label}
+                  onClick={() => scrollTo(item.target, item.label)}
+                  className={`relative py-1 text-xs sm:text-[13px] font-bold tracking-[0.14em] uppercase transition-all duration-300 cursor-pointer focus:outline-none flex flex-col items-center ${
+                    isActive
+                      ? 'text-white drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]'
+                      : 'text-neutral-400 hover:text-white'
+                  }`}
+                  style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700 }}
+                >
+                  <span>{item.label}</span>
+
+                  {/* Glowing Red Underline Indicator */}
+                  {isActive && (
+                    <span
+                      className="absolute -bottom-1 left-0 right-0 h-[2.5px] bg-red-600 rounded-full shadow-[0_0_10px_rgba(239,68,68,0.9)] animate-pulse"
+                    />
+                  )}
+                </button>
+              );
+            })}
           </div>
 
           {/* Mobile Hamburger */}
           <button
             id="hamburger-btn"
-            className="md:hidden text-neutral-400 hover:text-white transition-colors animate-p1"
+            className="md:hidden text-neutral-300 hover:text-white transition-colors focus:outline-none p-1"
             aria-label="Toggle menu"
             onClick={() => setMenuOpen(!menuOpen)}
           >
@@ -87,16 +120,31 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* Mobile Menu */}
-        <div className={`mobile-menu md:hidden ${menuOpen ? 'open' : ''}`}>
-          <div className="flex flex-col gap-3 pb-4 pt-2">
-            <button onClick={() => scrollTo('#about')} className={`${navLinkClass('about')} px-2 py-1.5 text-left`}>About</button>
-            <button onClick={() => scrollTo('#projects')} className={`${navLinkClass('projects')} px-2 py-1.5 text-left`}>Projects</button>
-            <button onClick={() => scrollTo('#experience')} className={`${navLinkClass('experience')} px-2 py-1.5 text-left`}>Experience</button>
-            <button onClick={() => scrollTo('#certifications')} className={`${navLinkClass('certifications')} px-2 py-1.5 text-left`}>Certifications</button>
+        {/* Mobile Dropdown Menu */}
+        {menuOpen && (
+          <div className="md:hidden pt-4 pb-3 border-t border-neutral-900 mt-3 flex flex-col gap-3.5 bg-black/95 px-3 rounded-lg backdrop-blur-lg">
+            {navItems.map((item) => {
+              const isActive = activeSection === item.label;
+              return (
+                <button
+                  key={item.label}
+                  onClick={() => scrollTo(item.target, item.label)}
+                  className={`text-left text-xs font-bold tracking-[0.18em] uppercase py-1.5 transition-all flex items-center justify-between ${
+                    isActive ? 'text-red-500 font-extrabold' : 'text-neutral-400 hover:text-white'
+                  }`}
+                  style={{ fontFamily: "'Syne', sans-serif" }}
+                >
+                  <span>{item.label}</span>
+                  {isActive && (
+                    <span className="w-2 h-2 rounded-full bg-red-600 shadow-[0_0_8px_rgba(239,68,68,0.9)]" />
+                  )}
+                </button>
+              );
+            })}
           </div>
-        </div>
+        )}
       </div>
     </nav>
   );
 }
+

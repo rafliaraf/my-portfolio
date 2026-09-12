@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 
 interface Project {
@@ -26,18 +26,17 @@ const projects: Project[] = [
     company: 'Dinas Perumahan dan Kawasan Permukiman Kota Tasikmalaya',
     type: 'Dual-Client Architecture · Project Management · Lead QA',
     description:
-      'Engineered an integrated municipal digital governance platform for residential site plan legalization and public utilities (PSU) monitoring. Designed with a headless Laravel 12 REST API and multi-role Flutter cross-platform architecture serving Developers, Desk Verifiers, and Field Surveyors.',
+      'A municipal platform for managing residential site plan approvals and public utility (PSU) verification. Built using Laravel 12 on the back-end and Flutter on mobile, connecting developers, administrative reviewers, and field survey teams.',
     responsibilities: [
-      { label: 'Project Management & SDLC:', text: 'Authored end-to-end technical documentation (BRD, SRS, Data Dictionary, and 9-week agile implementation roadmap).' },
-      { label: 'Dual-Client Architecture:', text: 'Designed API integration between Laravel 12 Sanctum token authentication and Flutter client with custom state management.' },
-      { label: 'Technical Document Engine:', text: 'Architected multipart CAD (.dwg/.dxf) & PDF upload workflows with server-side MIME validation and automated inspection report (BAP) PDF generation.' },
-      { label: 'Comprehensive QA Testing:', text: 'Formulated Blackbox test suites, boundary input validations, and executed multi-stakeholder User Acceptance Testing (UAT).' },
-      { label: 'Multi-Stage Workflow:', text: 'Implemented rigid verification state machine transitions from administrative check, technical review, field survey, to final endorsement.' },
+      { label: 'Technical Docs & Planning:', text: 'Created the initial BRD, SRS, data dictionary, and coordinated the 9-week development sprints.' },
+      { label: 'API & Auth Setup:', text: 'Connected the Flutter app to Laravel 12 using Sanctum token authentication with role-based access.' },
+      { label: 'File Upload & Reports:', text: 'Handled CAD (.dwg/.dxf) and PDF file uploads with strict MIME-type checks and auto-generated official inspection PDFs.' },
+      { label: 'Testing & QA:', text: 'Ran blackbox tests and led User Acceptance Testing (UAT) directly with government staff.' },
+      { label: 'Approval Workflow:', text: 'Built the multi-step verification pipeline from document submission to field check and final endorsement.' },
     ],
     tags: ['Project Management', 'Quality Assurance', 'Laravel 12', 'Flutter', 'REST API', 'Sanctum', 'Blackbox Testing', 'UAT'],
     image: '/images/project-saturumah.png',
   },
-
   {
     id: 'simpus-satusehat',
     date: 'Sep 2026',
@@ -46,13 +45,13 @@ const projects: Project[] = [
     company: 'SATUSEHAT Sandbox Kemenkes RI',
     type: 'HealthTech Interoperability · API Testing · Independent Project',
     description:
-      'Engineered and validated bridging integration between Puskesmas Information System (SIMPUS) and SATUSEHAT Kemenkes Sandbox based on international HL7 FHIR R4 standards. Covered secure OAuth 2.0 authentication, patient encounter lifecycle, and clinical diagnosis mapping.',
+      'Bridged a clinic system (SIMPUS) with the Indonesian Ministry of Health (Kemenkes) SATUSEHAT sandbox using HL7 FHIR R4 standards. Handled OAuth authentication, patient encounter tracking, and medical diagnosis mapping.',
     responsibilities: [
-      { label: 'OAuth 2.0 Token Bridging:', text: 'Implemented secure Client Credentials Flow for automated token generation and expiry management.' },
-      { label: 'FHIR Encounter Lifecycle:', text: 'Synchronized multi-stage encounter states (arrived, in-progress, finished) via RESTful POST/PUT requests.' },
-      { label: 'Diagnosis & Condition Mapping:', text: 'Mapped clinical conditions using standardized ICD-10 codes associated with patient IHS numbers and encounter references.' },
-      { label: 'Error Handling & Resilience:', text: 'Engineered fallback handlers for HTTP 504 Gateway Timeouts and validated FHIR OperationOutcome errors with persistent logging.' },
-      { label: 'Automated Testing:', text: 'Executed end-to-end integration test suites using automated CLI test runners and Postman Collections.' },
+      { label: 'OAuth 2.0 Auth:', text: 'Implemented client credentials token fetching with automatic refresh on token expiry.' },
+      { label: 'Encounter Syncing:', text: 'Updated patient consultation states (arrived, in-consultation, completed) directly to the FHIR endpoint.' },
+      { label: 'Condition & ICD-10:', text: 'Mapped diagnosis data to ICD-10 standards linked to the patient\'s verified IHS number.' },
+      { label: 'Error & Timeout Handling:', text: 'Added fallback handling for 504 gateway timeouts and logged OperationOutcome responses.' },
+      { label: 'Automated Postman Tests:', text: 'Wrote automated test suites in Postman to ensure requests conform to FHIR schemas.' },
     ],
     tags: ['HL7 FHIR R4', 'SATUSEHAT API', 'OAuth 2.0', 'Node.js', 'Postman', 'ICD-10', 'HealthTech'],
     image: '/images/project-satusehat.png',
@@ -65,13 +64,13 @@ const projects: Project[] = [
     company: 'Department of Communication and Informatics, Tasikmalaya City',
     type: 'Apprenticeship · APTIKA Division · QA Automation',
     description:
-      'Engineered comprehensive automated blackbox API test suites for the SIMPUS billing and cashier checkout subsystem. Covered consultation tariff calculations, drug prescriptions, multi-payment reconciliation, and double-charge idempotency safety.',
+      'Automated API test suites for the Puskesmas cashier and billing service. Tested calculation accuracy for patient fees, pharmacy prescriptions, QRIS payments, and double-charge protection.',
     responsibilities: [
-      { label: 'Tariff & Invoice Calculation:', text: 'Tested itemized invoice calculations aggregating registration, doctor consultations, and pharmacy prescription lines.' },
-      { label: 'Cashier Checkout Reconciliation:', text: 'Verified cash tender logic (exact change calculation, underpayment rejection) and QRIS digital payment confirmation.' },
-      { label: 'Idempotency Protection:', text: 'Validated transaction deduplication via Idempotency-Key headers to prevent duplicate charges from network retry anomalies.' },
-      { label: 'Official Receipt Generation:', text: 'Asserted uniqueness and format structure of digital payment receipts (KWT/PKM/YYYYMM/XXXX).' },
-      { label: 'Automated Test Suites:', text: 'Constructed Postman collections and Python runner scripts with 100% passed test assertions.' },
+      { label: 'Invoice Calculations:', text: 'Tested itemized billings combining registration, clinic checkups, and prescription items.' },
+      { label: 'Cash & QRIS Payment Checks:', text: 'Verified cash change math, underpayment rejections, and simulated QRIS transaction callbacks.' },
+      { label: 'Idempotency Protection:', text: 'Used Idempotency-Key headers to ensure retried network requests never charge a patient twice.' },
+      { label: 'Receipt Format Verification:', text: 'Asserted unique invoice numbers and receipt formatting requirements.' },
+      { label: 'Automated Test Scripts:', text: 'Built Postman collections and Python runners with 100% passing test assertions.' },
     ],
     tags: ['API Testing', 'Postman', 'Python', 'Billing System', 'Idempotency', 'Quality Assurance', 'SIMPUS'],
     link: 'https://github.com/rafliaraf/simpus-billing-api-testing',
@@ -85,13 +84,12 @@ const projects: Project[] = [
     company: 'Department of Communication and Informatics, Tasikmalaya City',
     type: 'Apprenticeship · APTIKA Division · QA Automation',
     description:
-      'Designed and executed end-to-end blackbox API test suites for the SIMPUS Loket/Kiosk queue ticketing and doctor appointment reservation system. Validated multi-unit queue prefixes, desk call lifecycle transitions, and enforced rigorous quota boundary limits.',
+      'End-to-end blackbox API testing for self-service kiosk ticketing and doctor booking. Verified ticket queue numbering, desk calling status, and doctor reservation limits.',
     responsibilities: [
-      { label: 'Kiosk Queue Dispatching:', text: 'Tested multi-clinic ticketing endpoints across Umum (A), Gigi (B), KIA (C), and Lansia (D) with sequence integrity and queue counter validations.' },
-      { label: 'Calling State Transitions:', text: 'Verified real-time lifecycle status transitions from MENUNGGU to DIPANGGIL and SELESAI/DILEWATI via PATCH endpoints with desk assignment.' },
-      { label: 'Doctor Schedule Catalog:', text: 'Validated dynamic schedule retrieval and real-time remaining quota tracking with clinic query filtering.' },
-      { label: 'Strict Quota Limit Validation:', text: 'Executed quota exhaustion tests, confirming robust HTTP 422 Unprocessable Entity responses when doctor reservation quotas were fully booked.' },
-      { label: 'Automated Postman Test Suites:', text: 'Built complete Postman collections with automated pre-request scripts and assertions achieving 100% test pass rate.' },
+      { label: 'Queue Ticket Endpoints:', text: 'Tested ticketing logic for general, dental, maternal, and elderly clinic queues.' },
+      { label: 'Status Updates:', text: 'Verified status transitions when patients are waiting, called to a desk, or completed.' },
+      { label: 'Quota Exhaustion Tests:', text: 'Simulated fully booked doctor schedules, making sure the API properly returns HTTP 422 instead of crashing.' },
+      { label: 'Automated Postman Collection:', text: 'Created test scripts in Postman to validate response schemas and status codes automatically.' },
     ],
     tags: ['API Testing', 'Postman', 'Python', 'REST API', 'Quality Assurance', 'HTTP 422', 'SIMPUS'],
     link: 'https://github.com/rafliaraf/uji-kiosk-antrian-reservasi-puskesmas',
@@ -105,14 +103,13 @@ const projects: Project[] = [
     company: 'Department of Communication and Informatics, Tasikmalaya City',
     type: 'Apprenticeship · APTIKA Division · QA Automation',
     description:
-      'Engineered comprehensive automated blackbox API test suites for the SIMPUS Pharmacy and E-Prescription subsystem. Verified prescription intake, clinical pharmacist reviews, dispensing execution with atomic inventory deduction, negative stock protection, and multi-thread race condition safety.',
+      'Automated API test suites for the e-prescription and medicine inventory workflow. Focused on doctor prescription validation, stock deduction, allergy alerts, and race conditions.',
     responsibilities: [
-      { label: 'E-Prescription Intake:', text: 'Tested incoming prescription polling endpoints filtering by active consultation status with patient allergy screening.' },
-      { label: 'Pharmacist Clinical Review:', text: 'Verified multi-tier prescription verification (administrative, pharmaceutical, clinical) and automated contraindication detection for known patient drug allergies (HTTP 422).' },
-      { label: 'Atomic Inventory Deduction:', text: 'Asserted accurate real-time stock deductions upon dispensing execution and verified comprehensive stock mutation card (kartu stok) audit logging.' },
-      { label: 'Negative Stock Protection:', text: 'Enforced strict zero-deficit validation, ensuring dispensing requests exceeding available physical stock trigger automatic rollbacks without minus mutations.' },
-      { label: 'Race Condition Concurrency Safety:', text: 'Simulated 5 concurrent multi-thread dispensing requests under critical stock levels, asserting thread lock integrity and preventing over-dispensing.' },
-      { label: 'Automated Test Suites:', text: 'Constructed complete Postman v2.1.0 test suites and Python test runners achieving 100% passed assertions.' },
+      { label: 'Prescription Flow:', text: 'Tested prescription intake from doctor consultations through pharmacist validation.' },
+      { label: 'Allergy Alerts:', text: 'Verified that prescribing medications conflicting with recorded patient allergies triggers HTTP 422 warnings.' },
+      { label: 'Stock Deduction Logic:', text: 'Checked that dispensing medicine deducts real stock accurately and blocks requests exceeding inventory.' },
+      { label: 'Concurrency / Race Conditions:', text: 'Sent concurrent simultaneous requests under low stock to confirm database locks prevent negative stock.' },
+      { label: 'Automated Testing:', text: 'Developed Postman collections and Python runner scripts achieving 100% passed test cases.' },
     ],
     tags: ['API Testing', 'Postman', 'Python', 'Inventory System', 'Negative Stock', 'Race Condition', 'SIMPUS'],
     link: 'https://github.com/rafliaraf/Uji-Farmasi-Resep-Elektronik-Logistik-Obat',
@@ -122,248 +119,283 @@ const projects: Project[] = [
     id: 'sipp',
     date: 'Aug 2026 – Present',
     title: 'SIPP KOTA TASIKMALAYA',
-    category: 'UI/UX & Web Development',
+    category: 'Public Sector Portal & API Integration',
     company: 'Department of Communication and Informatics, Tasikmalaya City',
     type: 'Apprenticeship · APTIKA Division · On-site',
     description:
-      'Assisted the APTIKA team at the Department of Communication and Informatics of Tasikmalaya City to completely overhaul the UI/UX of the SIPP portal. From design research to responsive front-end implementation.',
+      'Worked with the Diskominfo team to update the municipal public service portal (SIPP). Cleaned up agency service data, built responsive views in Laravel Blade, and tested data accuracy across devices.',
     responsibilities: [
-      { label: 'Design & Wireframing:', text: 'Mapped user flows and designed high-fidelity UI mockups using Figma.' },
-      { label: 'Slicing & Integration:', text: 'Translated UI designs into responsive code with Tailwind CSS and Laravel Blade.' },
-      { label: 'Data & Service Management:', text: 'Curated and inputted public service data from various regional government agencies (OPD) to populate the portal.' },
-      { label: 'Evaluation & Iteration:', text: 'Conducted layout testing across mobile and desktop devices.' },
+      { label: 'Data Management:', text: 'Organized and verified public service catalog data across local government agencies.' },
+      { label: 'Responsive Front-End:', text: 'Built clean interface components using Laravel Blade and Tailwind CSS.' },
+      { label: 'Testing & Verification:', text: 'Manually verified public service directory links, forms, and responsiveness across phones and desktops.' },
     ],
-    tags: ['Figma', 'UI/UX', 'Laravel', 'Tailwind CSS', 'Data Entry'],
+    tags: ['Laravel', 'REST API', 'Data Architecture', 'Tailwind CSS', 'Public Sector'],
     link: 'https://sipp.tasikmalayakota.go.id/',
     image: '/images/project-sippn.png',
-  },
-  {
-    id: 'fixyoufit',
-    date: 'Jan 2024 – Jul 2024',
-    title: 'Fixyoufit.id Apparel Artwork',
-    category: 'Graphic Design & Merchandise',
-    company: 'Fixyoufit.id — Full-time',
-    type: 'Jan 2024 - Jul 2024 · 7 mos · Tasikmalaya · On-site',
-    description:
-      'Created streetwear graphic apparel designs and promotional e-commerce catalog visuals. Handled production workflows from vector drafting to DTF textile printing.',
-    responsibilities: [
-      { label: 'Graphic Creation:', text: 'Designed e-commerce promotional graphics and streetwear t-shirt artworks using CorelDRAW & Photoshop.' },
-      { label: 'Workflow:', text: 'Managed fast-paced design turnaround to meet marketing launches without losing print resolution.' },
-      { label: 'Quality Control:', text: 'Supervised Direct Transfer Film (DTF) printing to guarantee crisp colors and durability.' },
-    ],
-    tags: ['CorelDRAW', 'Adobe Photoshop'],
-    image: '/images/project-fixyoufit.png',
-  },
-  {
-    id: 'r2sports',
-    date: 'Dec 2023 – Feb 2024',
-    title: 'R2Sports Camo Series Hoodie',
-    category: 'Graphic Design & Print Production',
-    company: 'R2Sports — Part-time',
-    type: 'Dec 2023 - Feb 2024 · 3 mos · Tasikmalaya · On-site',
-    description:
-      'Designed technical sportswear and outdoor camo pattern apparel. Took end-to-end responsibility from digital artwork preparation to large-format sublimation print and finishing.',
-    responsibilities: [
-      { label: 'Pattern Design:', text: 'Created intricate camouflage seamless patterns and hoodie jersey apparel layouts.' },
-      { label: 'Pre-press & Finishing:', text: 'Prepared color separations, print layouts, cutting, and packaging workflows.' },
-      { label: 'Equipment Handling:', text: 'Managed printing machines and maintained efficient production uptime.' },
-    ],
-    tags: ['CorelDRAW', 'Adobe Photoshop'],
-    image: '/images/project-graphic.png',
   },
 ];
 
 export default function ProjectsSection() {
-  const [selectedImage, setSelectedImage] = useState<Project | null>(null);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+
+  const total = projects.length;
+
+  const prevSlide = () => {
+    setCurrentIndex((prev) => (prev === 0 ? total - 1 : prev - 1));
+  };
+
+  const nextSlide = () => {
+    setCurrentIndex((prev) => (prev === total - 1 ? 0 : prev + 1));
+  };
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (selectedProject) return;
+      if (e.key === 'ArrowLeft') prevSlide();
+      if (e.key === 'ArrowRight') nextSlide();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedProject]);
+
+  const activeProj = projects[currentIndex];
 
   return (
-    <section id="projects" className="relative py-20 sm:py-28">
+    <section id="projects" className="relative py-20 sm:py-28 overflow-hidden select-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16" data-aos="fade-up">
-          <p className="text-xs sm:text-sm font-semibold text-red-500 uppercase tracking-widest mb-2">
-            Selected Works
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14" data-aos="zoom-in">
+          <p
+            className="text-xs sm:text-sm font-semibold text-red-500 uppercase mb-2 tracking-[0.1em]"
+            style={{ letterSpacing: '0.1em' }}
+          >
+            Systems &amp; Architecture
           </p>
           <h2
             className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight"
-            style={{ fontFamily: "'Syne', sans-serif" }}
+            style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700 }}
           >
-            Featured Projects & Visuals
+            Featured Back-End Projects
           </h2>
-          <p className="text-sm sm:text-base text-neutral-400 mt-3 max-w-2xl mx-auto">
-            A curated portfolio of digital platforms, UI/UX systems, and physical apparel design — click any image to view in high resolution.
+          <p
+            className="text-sm sm:text-base text-[#B3B3B3] font-normal mt-3 max-w-2xl mx-auto leading-[1.65]"
+            style={{ fontFamily: "'Inter', sans-serif" }}
+          >
+            A collection of back-end services, API test suites, and public sector projects I have worked on. Click any card for details.
           </p>
         </div>
 
-        {/* Project Cards (Each with Prominent Visual Image) */}
-        <div className="space-y-12 lg:space-y-16">
-          {projects.map((project, index) => {
-            const isReversed = index % 2 === 1;
+        {/* ── 3D Coverflow Showcase (Landscape) ── */}
+        <div className="relative w-full max-w-6xl mx-auto flex items-center justify-center min-h-[340px] sm:min-h-[400px] md:min-h-[460px]">
+          {/* Left Red Arrow */}
+          <button
+            onClick={prevSlide}
+            aria-label="Previous project"
+            className="absolute left-1 sm:left-3 md:left-6 z-30 p-2 sm:p-3 text-red-600 hover:text-red-400 transition-all duration-300 transform hover:scale-125 focus:outline-none drop-shadow-[0_0_12px_rgba(239,68,68,0.8)] cursor-pointer"
+          >
+            <svg
+              className="w-8 h-8 sm:w-11 sm:h-11 stroke-current fill-none stroke-[3]"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
 
-            return (
-              <div
-                key={project.id}
-                className="group relative rounded-[2.5rem] border border-neutral-800/80 bg-gradient-to-b from-dark-card to-dark-primary p-6 sm:p-8 lg:p-10 overflow-hidden hover:border-red-500/40 transition-all duration-500 hover:shadow-[0_0_40px_rgba(220,38,38,0.12)]"
-                data-aos="fade-up"
-              >
-                <div className="absolute inset-0 bg-red-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+          {/* Cards Stage with Perspective */}
+          <div
+            className="relative w-full h-[280px] sm:h-[350px] md:h-[400px] flex items-center justify-center"
+            style={{ perspective: '1200px' }}
+          >
+            {projects.map((project, idx) => {
+              // Calculate shortest circular offset distance (-1, 0, 1, etc.)
+              let offset = idx - currentIndex;
+              if (offset > total / 2) offset -= total;
+              if (offset < -total / 2) offset += total;
 
-                <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+              const isCenter = offset === 0;
+              const isPrev = offset === -1;
+              const isNext = offset === 1;
+              const isVisible = Math.abs(offset) <= 2;
 
-                  {/* Visual Image Showcase (Takes 6 or 7 columns) */}
-                  <div className={`lg:col-span-6 ${isReversed ? 'lg:order-2' : 'lg:order-1'}`}>
-                    <div
-                      onClick={() => setSelectedImage(project)}
-                      className="relative rounded-2xl overflow-hidden border border-neutral-800 bg-neutral-950 aspect-[4/3] sm:aspect-[16/10] shadow-2xl cursor-pointer group/img flex flex-col"
-                    >
-                      {/* Browser Window Header Mockup for Web Projects */}
-                      {project.id === 'sipp' && (
-                        <div className="flex items-center gap-2 px-3 py-2 bg-neutral-900/90 border-b border-neutral-800 z-10 shrink-0">
-                          <div className="flex items-center gap-1.5">
-                            <span className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
-                            <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/80" />
-                            <span className="w-2.5 h-2.5 rounded-full bg-green-500/80" />
-                          </div>
-                          <div className="flex-1 mx-2 px-2.5 py-0.5 rounded-md bg-neutral-950/70 border border-neutral-800 text-[10px] text-neutral-400 font-mono truncate flex items-center gap-1.5">
-                            <span className="text-emerald-500">🔒</span>
-                            <span>sipp.tasikmalayakota.go.id</span>
-                          </div>
-                        </div>
-                      )}
+              if (!isVisible) return null;
 
-                      <div className="relative flex-1 w-full h-full overflow-hidden">
-                        <Image
-                          src={project.image}
-                          alt={project.title}
-                          fill
-                          className={`group-hover/img:scale-105 transition-transform duration-700 ease-out ${
-                            project.id.startsWith('simpus') || project.id === 'sipp' || project.id === 'satu-rumah'
-                              ? 'object-cover object-center'
-                              : 'object-contain p-3'
-                          }`}
-                          loading="lazy"
-                        />
+              // Compute transforms for the 3D coverflow effect
+              let translateX = '0%';
+              let scale = 0.7;
+              let zIndex = 5;
+              let opacity = 0;
+              let rotateY = 0;
 
-                        {/* Subtle Vignette Gradient */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-dark-primary/60 via-transparent to-transparent pointer-events-none" />
+              if (isCenter) {
+                translateX = '0%';
+                scale = 1;
+                zIndex = 20;
+                opacity = 1;
+                rotateY = 0;
+              } else if (isPrev) {
+                translateX = '-55%';
+                scale = 0.82;
+                zIndex = 10;
+                opacity = 0.85;
+                rotateY = 14;
+              } else if (isNext) {
+                translateX = '55%';
+                scale = 0.82;
+                zIndex = 10;
+                opacity = 0.85;
+                rotateY = -14;
+              } else if (offset === -2) {
+                translateX = '-95%';
+                scale = 0.68;
+                zIndex = 5;
+                opacity = 0.35;
+                rotateY = 22;
+              } else if (offset === 2) {
+                translateX = '95%';
+                scale = 0.68;
+                zIndex = 5;
+                opacity = 0.35;
+                rotateY = -22;
+              }
 
-                        {/* Click-to-zoom badge indicator */}
-                        <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-10 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/70 backdrop-blur-md text-white text-xs font-medium border border-white/10 group-hover/img:border-red-500/50 group-hover/img:bg-red-600 transition-all duration-300">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
-                          </svg>
-                          <span>View Full Image</span>
-                        </div>
+              return (
+                <div
+                  key={project.id}
+                  onClick={() => {
+                    if (isCenter) {
+                      setSelectedProject(project);
+                    } else {
+                      setCurrentIndex(idx);
+                    }
+                  }}
+                  style={{
+                    transform: `translateX(${translateX}) scale(${scale}) rotateY(${rotateY}deg)`,
+                    zIndex,
+                    opacity,
+                    transition: 'all 0.5s cubic-bezier(0.25, 1, 0.5, 1)',
+                  }}
+                  className={`absolute w-[320px] sm:w-[460px] md:w-[560px] lg:w-[620px] aspect-[16/10] cursor-pointer group transition-all duration-500 rounded-lg overflow-hidden ${
+                    isCenter
+                      ? 'border-[3px] border-red-600 shadow-[0_0_40px_rgba(220,38,38,0.45)]'
+                      : 'border-2 border-red-600/70 brightness-75 hover:brightness-100 hover:border-red-500 shadow-[0_0_20px_rgba(220,38,38,0.2)]'
+                  }`}
+                >
+                  {/* Landscape Image Container */}
+                  <div className="relative w-full h-full bg-neutral-900 flex items-center justify-center overflow-hidden">
+                    <Image
+                      src={project.image}
+                      alt={project.title}
+                      fill
+                      unoptimized={true}
+                      sizes="(max-width: 768px) 460px, 620px"
+                      className="object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out"
+                    />
 
-                        {/* Category Badge */}
-                        <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10">
-                          <span className="text-[11px] font-medium px-3 py-1 rounded-full bg-black/75 backdrop-blur-md text-red-400 border border-red-500/30">
-                            {project.category}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                    {/* Dark gradient for title legibility */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/35 to-transparent opacity-90 group-hover:opacity-75 transition-opacity pointer-events-none" />
 
-                  {/* Project Details Content */}
-                  <div className={`lg:col-span-6 flex flex-col justify-between ${isReversed ? 'lg:order-1' : 'lg:order-2'}`}>
-                    <div>
-                      {/* Meta info: Category & Timeline */}
-                      <div className="flex flex-wrap items-center gap-3 mb-3">
-                        <span className="text-xs font-semibold tracking-wider uppercase text-red-500 bg-red-500/10 border border-red-500/20 px-3 py-1 rounded-full">
-                          {project.category}
-                        </span>
-                        {project.date && (
-                          <span className="text-xs text-neutral-400 font-medium tracking-wide">{project.date}</span>
-                        )}
-                      </div>
-
-                      {/* Title & Company */}
+                    {/* Overlay Info */}
+                    <div className="absolute bottom-0 inset-x-0 p-4 sm:p-5 flex flex-col justify-end text-left z-10 pointer-events-none">
+                      <span
+                        className="text-[10px] sm:text-xs font-semibold uppercase text-red-400 mb-1 line-clamp-1 tracking-[0.1em]"
+                        style={{ letterSpacing: '0.1em' }}
+                      >
+                        {project.category}
+                      </span>
                       <h3
-                        className="text-2xl sm:text-3xl font-bold tracking-tight text-white mb-1.5 group-hover:text-red-50 transition-colors"
-                        style={{ fontFamily: "'Syne', sans-serif" }}
+                        className="text-sm sm:text-base md:text-lg font-bold text-white leading-snug line-clamp-1 drop-shadow-md"
+                        style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700 }}
                       >
                         {project.title}
                       </h3>
-                      <p className="text-sm text-red-400 font-medium mb-1">{project.company}</p>
-                      <p className="text-xs text-neutral-500 mb-4">{project.type}</p>
-
-                      {/* Description */}
-                      <p className="text-sm text-neutral-300 leading-relaxed mb-5">
-                        {project.description}
-                      </p>
-
-                      {/* Responsibilities list */}
-                      <div className="space-y-2.5 mb-6">
-                        {project.responsibilities.map((r, i) => (
-                          <div key={i} className="flex items-start gap-2.5">
-                            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-500 shrink-0" />
-                            <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed">
-                              {r.label && <span className="text-neutral-200 font-semibold">{r.label} </span>}
-                              {r.text}
-                            </p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Bottom Area: Tags & Links */}
-                    <div>
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        {project.tags.map((tag) => (
-                          <span key={tag} className="tech-tag">
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-
-                      {project.link && (
-                        <a
-                          href={project.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 text-sm text-red-500 hover:text-red-400 font-semibold transition-colors group/link"
+                      {isCenter && (
+                        <p
+                          className="text-[11px] sm:text-xs text-[#B3B3B3] mt-1 line-clamp-1 font-normal leading-[1.6]"
+                          style={{ fontFamily: "'Inter', sans-serif" }}
                         >
-                          {project.link.includes('github.com') ? 'View on GitHub Repository' : 'Visit Live Site'}
-                          <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7v10" />
-                          </svg>
-                        </a>
+                          {project.company}
+                        </p>
                       )}
                     </div>
-
                   </div>
-
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
+
+          {/* Right Red Arrow */}
+          <button
+            onClick={nextSlide}
+            aria-label="Next project"
+            className="absolute right-2 sm:right-4 md:right-8 z-30 p-2 sm:p-3 text-red-600 hover:text-red-400 transition-all duration-300 transform hover:scale-125 focus:outline-none drop-shadow-[0_0_12px_rgba(239,68,68,0.8)] cursor-pointer"
+          >
+            <svg
+              className="w-8 h-8 sm:w-11 sm:h-11 stroke-current fill-none stroke-[3]"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
         </div>
 
+        {/* ── Carousel Pagination Indicators ── */}
+        <div className="mt-8 flex flex-col items-center justify-center gap-3" data-aos="fade-up">
+          <div className="flex items-center justify-center gap-2">
+            {projects.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrentIndex(i)}
+                aria-label={`Go to slide ${i + 1}`}
+                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                  i === currentIndex
+                    ? 'w-8 bg-red-600 shadow-[0_0_10px_rgba(239,68,68,0.8)]'
+                    : 'w-2 bg-neutral-800 hover:bg-neutral-600'
+                }`}
+              />
+            ))}
+          </div>
+          <p
+            className="text-xs text-neutral-400 font-normal tracking-wide flex items-center gap-1.5"
+            style={{ fontFamily: "'Inter', sans-serif" }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping inline-block" />
+            Click center card to view technical documentation &amp; details
+          </p>
+        </div>
       </div>
 
-      {/* Fullscreen Image Preview Lightbox */}
-      {selectedImage && (
+      {/* ── Detail Modal for Selected Project ── */}
+      {selectedProject && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/90 backdrop-blur-md animate-fade-in"
-          onClick={() => setSelectedImage(null)}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fade-in"
+          onClick={() => setSelectedProject(null)}
         >
           <div
-            className="relative max-w-4xl w-full bg-dark-card border border-neutral-800 rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(220,38,38,0.25)]"
+            className="relative max-w-3xl w-full bg-dark-card border border-red-900/60 rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(220,38,38,0.3)] max-h-[90vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-800/80 bg-dark-primary/70">
               <div>
-                <span className="text-xs text-red-500 font-semibold uppercase tracking-wider">
-                  {selectedImage.category}
+                <span
+                  className="text-xs text-red-500 font-semibold uppercase tracking-[0.1em]"
+                  style={{ letterSpacing: '0.1em' }}
+                >
+                  {selectedProject.category}
                 </span>
-                <h4 className="text-lg font-bold text-white">{selectedImage.title}</h4>
+                <h4
+                  className="text-lg font-bold text-white"
+                  style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700 }}
+                >
+                  {selectedProject.title}
+                </h4>
               </div>
               <button
-                onClick={() => setSelectedImage(null)}
-                className="p-2 rounded-full text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors"
+                onClick={() => setSelectedProject(null)}
+                className="p-2 rounded-full text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors cursor-pointer"
                 aria-label="Close modal"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -372,29 +404,83 @@ export default function ProjectsSection() {
               </button>
             </div>
 
-            {/* Modal Image Display */}
-            <div className="relative w-full h-[60vh] sm:h-[70vh] bg-neutral-950 flex items-center justify-center p-4">
-              <Image
-                src={selectedImage.image}
-                alt={selectedImage.title}
-                fill
-                className="object-contain"
-                priority
-              />
+            {/* Modal Scroll Content */}
+            <div className="overflow-y-auto p-6 space-y-5">
+              <div className="relative w-full aspect-[16/9] max-h-[380px] rounded-xl overflow-hidden border border-neutral-800 bg-neutral-950/90 shadow-inner">
+                <Image
+                  src={selectedProject.image}
+                  alt={selectedProject.title}
+                  fill
+                  unoptimized={true}
+                  className="object-contain"
+                  priority
+                />
+              </div>
+
+              <div>
+                <h5
+                  className="text-xs font-semibold text-red-400 uppercase tracking-[0.1em] mb-1.5"
+                  style={{ letterSpacing: '0.1em' }}
+                >
+                  Overview
+                </h5>
+                <p
+                  className="text-sm text-[#B3B3B3] font-normal leading-[1.65]"
+                  style={{ fontFamily: "'Inter', sans-serif" }}
+                >
+                  {selectedProject.description}
+                </p>
+              </div>
+
+              <div>
+                <h5
+                  className="text-xs font-semibold text-red-400 uppercase tracking-[0.1em] mb-2"
+                  style={{ letterSpacing: '0.1em' }}
+                >
+                  Key Responsibilities &amp; Scope
+                </h5>
+                <div className="space-y-2">
+                  {selectedProject.responsibilities.map((r, i) => (
+                    <div
+                      key={i}
+                      className="text-xs sm:text-sm text-[#B3B3B3] font-normal leading-[1.65] flex items-start gap-2"
+                      style={{ fontFamily: "'Inter', sans-serif" }}
+                    >
+                      <span className="text-red-500 mt-1 font-bold">•</span>
+                      <span>
+                        <strong className="text-[#E0E0E0] font-medium">{r.label} </strong>
+                        {r.text}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
 
             {/* Modal Footer */}
-            <div className="px-6 py-4 bg-dark-primary/90 border-t border-neutral-800/80 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <p className="text-xs sm:text-sm text-neutral-300 max-w-xl">
-                {selectedImage.description}
-              </p>
-              <div className="flex flex-wrap gap-1.5 shrink-0">
-                {selectedImage.tags.map((t) => (
-                  <span key={t} className="tech-tag text-xs">
+            <div className="px-6 py-4 bg-dark-primary/90 border-t border-neutral-800/80 flex flex-wrap items-center justify-between gap-3">
+              <div className="flex flex-wrap gap-1.5">
+                {selectedProject.tags.map((t) => (
+                  <span
+                    key={t}
+                    className="text-[12px] px-2.5 py-1 rounded-md bg-neutral-900/90 text-[#B3B3B3] border border-neutral-800"
+                    style={{ fontFamily: "var(--font-mono), 'JetBrains Mono', monospace", fontSize: '12px' }}
+                  >
                     {t}
                   </span>
                 ))}
               </div>
+              {selectedProject.link && (
+                <a
+                  href={selectedProject.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs font-semibold text-red-400 hover:text-red-300 underline underline-offset-4"
+                  style={{ fontFamily: "'Inter', sans-serif" }}
+                >
+                  View Code on GitHub →
+                </a>
+              )}
             </div>
           </div>
         </div>

@@ -1,194 +1,133 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import Image from 'next/image';
-import LineWaves from './LineWaves';
+import React from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 export default function HeroSection() {
-  const tiltCardRef = useRef<HTMLDivElement>(null);
-  const tiltInnerRef = useRef<HTMLDivElement>(null);
-  const electricCanvasRef = useRef<HTMLCanvasElement>(null);
-  const electricContainerRef = useRef<HTMLDivElement>(null);
+  // Track scroll inside the window for clean, fluid fade out on scroll down, and reappearance on scroll up
+  const { scrollY } = useScroll();
 
-  // 3D Tilt Effect
-  useEffect(() => {
-    const card = tiltCardRef.current;
-    const inner = tiltInnerRef.current;
-    if (!card || !inner) return;
-
-    const onMove = (e: MouseEvent) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -12;
-      const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 12;
-      inner.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.03, 1.03, 1.03)`;
-    };
-    const onLeave = () => {
-      inner.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-    };
-    card.addEventListener('mousemove', onMove);
-    card.addEventListener('mouseleave', onLeave);
-    return () => { card.removeEventListener('mousemove', onMove); card.removeEventListener('mouseleave', onLeave); };
-  }, []);
-
-  // Electric Border Animation
-  useEffect(() => {
-    const container = electricContainerRef.current;
-    const elCanvas = electricCanvasRef.current;
-    if (!container || !elCanvas) return;
-    const ctx = elCanvas.getContext('2d')!;
-    const chaos = 0.12, borderRadius = 16, borderOffset = 60;
-    let time = 0, lastFrameTime = 0, width = 0, height = 0;
-
-    const random = (x: number) => (Math.sin(x * 12.9898) * 43758.5453) % 1;
-    const noise2D = (x: number, y: number) => {
-      const i = Math.floor(x), j = Math.floor(y), fx = x - i, fy = y - j;
-      const a = random(i + j * 57), b = random(i + 1 + j * 57), c = random(i + (j + 1) * 57), d = random(i + 1 + (j + 1) * 57);
-      const ux = fx * fx * (3 - 2 * fx), uy = fy * fy * (3 - 2 * fy);
-      return a * (1 - ux) * (1 - uy) + b * ux * (1 - uy) + c * (1 - ux) * uy + d * ux * uy;
-    };
-    const octNoise = (x: number, t: number, seed: number) => {
-      let y = 0, amp = chaos, freq = 10;
-      for (let i = 0; i < 10; i++) { y += amp * noise2D(freq * x + seed * 100, t * freq * 0.3); freq *= 1.6; amp *= 0.7; }
-      return y;
-    };
-    const getCorner = (cx: number, cy: number, r: number, sa: number, al: number, p: number) => ({ x: cx + r * Math.cos(sa + p * al), y: cy + r * Math.sin(sa + p * al) });
-    const getRectPoint = (t: number, l: number, top: number, w: number, h: number, r: number) => {
-      const sw = w - 2 * r, sh = h - 2 * r, ca = (Math.PI * r) / 2, perim = 2 * sw + 2 * sh + 4 * ca;
-      const dist = t * perim; let acc = 0;
-      if (dist <= acc + sw) { return { x: l + r + (dist - acc) / sw * sw, y: top }; } acc += sw;
-      if (dist <= acc + ca) { return getCorner(l + w - r, top + r, r, -Math.PI / 2, Math.PI / 2, (dist - acc) / ca); } acc += ca;
-      if (dist <= acc + sh) { return { x: l + w, y: top + r + (dist - acc) / sh * sh }; } acc += sh;
-      if (dist <= acc + ca) { return getCorner(l + w - r, top + h - r, r, 0, Math.PI / 2, (dist - acc) / ca); } acc += ca;
-      if (dist <= acc + sw) { return { x: l + w - r - (dist - acc) / sw * sw, y: top + h }; } acc += sw;
-      if (dist <= acc + ca) { return getCorner(l + r, top + h - r, r, Math.PI / 2, Math.PI / 2, (dist - acc) / ca); } acc += ca;
-      if (dist <= acc + sh) { return { x: l, y: top + h - r - (dist - acc) / sh * sh }; } acc += sh;
-      return getCorner(l + r, top + r, r, Math.PI, Math.PI / 2, (dist - acc) / ca);
-    };
-
-    const updateSize = () => {
-      const rw = container.offsetWidth, rh = container.offsetHeight;
-      const w = rw + borderOffset * 2, h = rh + borderOffset * 2;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      elCanvas.width = w * dpr; elCanvas.height = h * dpr;
-      elCanvas.style.width = `${w}px`; elCanvas.style.height = `${h}px`;
-      ctx.scale(dpr, dpr); return { w, h };
-    };
-    const s = updateSize(); width = s.w; height = s.h;
-
-    let raf: number;
-    const draw = (currentTime: number) => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      time += ((currentTime - lastFrameTime) / 1000); lastFrameTime = currentTime;
-      ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, elCanvas.width, elCanvas.height); ctx.scale(dpr, dpr);
-      ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 1; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-      const l = borderOffset, t = borderOffset, bw = width - 2 * borderOffset, bh = height - 2 * borderOffset;
-      const maxR = Math.min(bw, bh) / 2, r = Math.min(borderRadius, maxR);
-      const perim = 2 * (bw + bh) + 2 * Math.PI * r, count = Math.floor(perim / 2);
-      ctx.beginPath();
-      for (let i = 0; i <= count; i++) {
-        const p = i / count, pt = getRectPoint(p, l, t, bw, bh, r);
-        const dx = octNoise(p * 8, time, 0) * 60, dy = octNoise(p * 8, time, 1) * 60;
-        if (i === 0) ctx.moveTo(pt.x + dx, pt.y + dy); else ctx.lineTo(pt.x + dx, pt.y + dy);
-      }
-      ctx.closePath(); ctx.stroke();
-      raf = requestAnimationFrame(draw);
-    };
-    raf = requestAnimationFrame(draw);
-
-    const ro = new ResizeObserver(() => { const s = updateSize(); width = s.w; height = s.h; });
-    ro.observe(container);
-    return () => { cancelAnimationFrame(raf); ro.disconnect(); };
-  }, []);
+  // Opacity transitions from 1 (top of page) to 0 (around 280px scroll)
+  const opacity = useTransform(scrollY, [0, 260], [1, 0]);
+  // Smooth subtle upward movement as user scrolls down
+  const y = useTransform(scrollY, [0, 260], [0, -45]);
+  // Subtle scale reduction for premium cinematic parallax
+  const scale = useTransform(scrollY, [0, 260], [1, 0.96]);
 
   return (
     <section
       id="about"
-      className="relative min-h-screen flex items-center overflow-hidden grid-bg animate-zoom-in"
+      className="relative w-full min-h-screen min-h-[100dvh] flex flex-col justify-between bg-transparent overflow-hidden px-5 sm:px-10 lg:px-16 select-none pt-24 sm:pt-28 pb-10 sm:pb-14"
     >
-      <div className="absolute inset-0 z-0">
-        <LineWaves
-          speed={0.3}
-          innerLineCount={32}
-          outerLineCount={36}
-          warpIntensity={1}
-          rotation={-45}
-          edgeFadeWidth={0}
-          colorCycleSpeed={1}
-          brightness={1.5}
-          color1="#ff0000"
-          color2="#ff4444"
-          color3="#ff0000"
-          enableMouseInteraction
-          mouseInfluence={2}
-          className="w-full h-full absolute inset-0"
-        />
-      </div>
-      <div className="absolute inset-0 bg-gradient-to-b from-dark-primary via-transparent to-dark-primary pointer-events-none z-0" />
-
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-24 pb-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-
-          {/* Left — Photo */}
-          <div className="flex justify-center lg:justify-start" data-aos="zoom-in" data-aos-duration="1200">
-            <div ref={tiltCardRef} className="tilt-card cursor-pointer">
-              <div ref={tiltInnerRef} className="tilt-card-inner relative">
-                <div
-                  ref={electricContainerRef}
-                  className="relative overflow-visible isolate mx-auto"
-                  style={{ '--electric-border-color': '#dc2626', borderRadius: '24px' } as React.CSSProperties}
-                >
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-[2]">
-                    <canvas ref={electricCanvasRef} className="block" />
-                  </div>
-                  <div className="absolute inset-0 rounded-[inherit] pointer-events-none z-0">
-                    <div className="absolute inset-0 rounded-[inherit] pointer-events-none" style={{ border: '2px solid rgba(220,38,38,0.5)', filter: 'blur(1px)' }} />
-                    <div className="absolute inset-0 rounded-[inherit] pointer-events-none" style={{ border: '1px solid #dc2626', filter: 'blur(3px)' }} />
-                    <div className="absolute inset-0 rounded-[inherit] pointer-events-none -z-[1] scale-[1.05] opacity-20" style={{ filter: 'blur(30px)', background: 'linear-gradient(-30deg,#dc2626,transparent,#dc2626)' }} />
-                  </div>
-                  <div className="relative rounded-[inherit] z-[1] overflow-hidden bg-dark-secondary w-[260px] h-[340px] sm:w-[320px] sm:h-[420px] lg:w-[380px] lg:h-[500px] shadow-2xl shadow-black/50">
-                    <Image
-                      src="/images/profile-new.jpg"
-                      alt="Muhammad Rafli Aolia Ansori — Portrait"
-                      fill
-                      className="object-cover object-[center_20%] filter contrast-[1.05] brightness-95"
-                      priority
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-dark-primary via-dark-primary/60 to-transparent" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right — Text */}
-          <div className="text-center lg:text-left mt-4 lg:mt-0 flex flex-col items-center lg:items-start z-10">
-            <h1
-              className="flex flex-col text-[5.5vw] sm:text-2xl md:text-3xl lg:text-3xl xl:text-4xl font-extrabold tracking-tight text-white leading-[1.1]"
+      {/* ── Scroll-Linked Motion Container ── */}
+      <motion.div
+        style={{ opacity, y, scale }}
+        className="relative z-10 w-full max-w-6xl mx-auto flex-1 flex flex-col justify-between"
+      >
+        {/* ── Top Bar: Clean Greeting Meta ── */}
+        <div className="w-full pt-3 sm:pt-4">
+          <div className="flex flex-col">
+            <span
+              className="text-[11px] sm:text-xs font-bold text-red-500 uppercase tracking-[0.25em]"
               style={{ fontFamily: "'Syne', sans-serif" }}
             >
-              <span className="block animate-p1 text-transparent bg-clip-text bg-gradient-to-r from-white via-neutral-200 to-neutral-400 whitespace-nowrap">
-                MUHAMMAD RAFLI
-              </span>
-
-              <span className="block animate-p1 mt-1 lg:mt-2 whitespace-nowrap">
-                AOLIA <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-600 drop-shadow-[0_0_15px_rgba(239,68,68,0.3)]">ANSORI</span>
-              </span>
-            </h1>
-
-            <p className="mt-6 text-base sm:text-lg text-white/90 max-w-xl leading-relaxed font-medium animate-p2 text-center lg:text-left">
-              <span className="text-red-400 font-semibold">Information Systems Student</span>
-              <span className="mx-2 text-neutral-500">|</span>
-              <span className="text-neutral-200">Graphic Designer &amp; Front-End Developer</span>
-              <span className="mx-2 text-neutral-500">|</span>
-              <span className="text-neutral-300">Crafting Digital Public Services &amp; Modern Web Interfaces</span>
-            </p>
-
-
+              HELLO! 👋
+            </span>
+            <span
+              className="text-xs sm:text-sm text-neutral-300 font-semibold tracking-wider uppercase mt-0.5"
+              style={{ fontFamily: "'Inter', sans-serif" }}
+            >
+              I&apos;M MUHAMMAD RAFLI
+            </span>
           </div>
         </div>
-      </div>
+
+        {/* ── Center Stage: Clean & High-Impact Typography (Back-End Developer) ── */}
+        <div className="my-auto py-8 sm:py-12 w-full">
+          <h1
+            className="text-white font-black leading-[0.94] sm:leading-[0.90] tracking-tight uppercase select-none drop-shadow-[0_12px_40px_rgba(0,0,0,0.95)]"
+            style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}
+          >
+            <span className="block text-[2rem] xs:text-[2.4rem] sm:text-[3.8rem] md:text-[4.8rem] lg:text-[5.8rem] text-white">
+              BACK-END
+            </span>
+            <span className="block text-[2rem] xs:text-[2.4rem] sm:text-[3.8rem] md:text-[4.8rem] lg:text-[5.8rem] text-white mt-0.5 sm:mt-1">
+              DEVELOPER
+            </span>
+          </h1>
+        </div>
+
+        {/* ── Bottom Section: Specialization & Direct Contacts ── */}
+        <div className="pt-4 sm:pt-6 border-t border-neutral-800/80 flex flex-col md:flex-row md:items-end justify-between gap-5 sm:gap-6">
+          {/* Focus Specialization */}
+          <div className="max-w-lg">
+            <p
+              className="text-xs font-semibold text-red-500 uppercase tracking-widest mb-1"
+              style={{ fontFamily: "'Syne', sans-serif" }}
+            >
+              WHAT I DO
+            </p>
+            <p
+              className="text-xs sm:text-sm text-neutral-300 font-normal leading-relaxed text-balance"
+              style={{ fontFamily: "'Inter', sans-serif" }}
+            >
+              I build and test back-end systems — focusing on reliable REST APIs, database performance, and making sure endpoints don&apos;t break in production.
+            </p>
+          </div>
+
+          {/* Identity & Direct Social Links */}
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 self-start md:self-auto">
+            <span
+              className="text-xs text-neutral-400 font-medium tracking-wider uppercase"
+              style={{ fontFamily: "var(--font-mono), 'JetBrains Mono', monospace" }}
+            >
+              MUHAMMAD RAFLI AOLIA ANSORI
+            </span>
+
+            <div className="flex items-center gap-2.5">
+              {/* GitHub */}
+              <a
+                href="https://github.com/rafliaraf"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub"
+                title="GitHub: rafliaraf"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-neutral-900 border border-neutral-800 hover:border-red-500 text-neutral-300 hover:text-white flex items-center justify-center transition-all duration-200 hover:scale-110"
+              >
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                  <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+                </svg>
+              </a>
+
+              {/* LinkedIn */}
+              <a
+                href="https://www.linkedin.com/in/muhammadrafliaoliaa/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                title="LinkedIn: Muhammad Rafli Aolia Ansori"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-neutral-900 border border-neutral-800 hover:border-red-500 text-neutral-300 hover:text-white flex items-center justify-center transition-all duration-200 hover:scale-110"
+              >
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                  <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" />
+                </svg>
+              </a>
+
+              {/* Gmail Direct */}
+              <a
+                href="mailto:muhammadrafli0876@gmail.com"
+                aria-label="Gmail Direct"
+                title="Email: muhammadrafli0876@gmail.com"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-neutral-900 border border-neutral-800 hover:border-red-500 text-neutral-300 hover:text-white flex items-center justify-center transition-all duration-200 hover:scale-110"
+              >
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                  <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </motion.div>
     </section>
   );
 }

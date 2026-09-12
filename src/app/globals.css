@@ -10,13 +10,15 @@
     --color-neon-red: #dc2626;
     --color-neon-red-glow: rgba(220, 38, 38, 0.3);
     --color-neon-red-subtle: rgba(220, 38, 38, 0.08);
-    --font-family-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
-    --font-family-title: 'Syne', sans-serif;
-    --font-family-body: 'Plus Jakarta Sans', sans-serif;
+    --font-family-sans: var(--font-inter), 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-family-title: var(--font-syne), 'Syne', sans-serif;
+    --font-family-body: var(--font-inter), 'Inter', sans-serif;
+    --font-family-mono: var(--font-mono), 'JetBrains Mono', monospace;
 }
 
-/* ── Initial states for GSAP Entrance Animation ──── */
-.animate-p1, .animate-p2, .animate-p3, .animate-p4 {
+
+/* ── Initial states for GSAP Entrance Animation (Navbar & other sections) ──── */
+.animate-p3, .animate-p4 {
     opacity: 0;
     visibility: hidden;
     transform: translateY(30px);
@@ -63,6 +65,20 @@ body {
     50% { box-shadow: 0 0 40px var(--color-neon-red-glow), 0 0 80px rgba(220, 38, 38, 0.2); }
 }
 .animate-glow-pulse { animation: glow-pulse 3s ease-in-out infinite; }
+
+/* ── Shimmer / Shiny Text Animation ────────────── */
+@keyframes text-shimmer {
+    0% {
+        background-position: 200% center;
+    }
+    100% {
+        background-position: -200% center;
+    }
+}
+.animate-shimmer {
+    background-size: 200% auto;
+    animation: text-shimmer 6s linear infinite;
+}
 
 /* ── Zoom In Animations ─────────────────────── */
 @keyframes zoomIn {
@@ -153,12 +169,14 @@ body {
     align-items: center;
     padding: 0.25rem 0.625rem;
     border-radius: 0.375rem;
-    font-size: 0.7rem;
+    font-family: var(--font-mono), 'JetBrains Mono', monospace;
+    font-size: 12px;
     font-weight: 500;
     background: rgba(255, 255, 255, 0.05);
-    color: #a3a3a3;
+    color: #b3b3b3;
     border: 1px solid rgba(255, 255, 255, 0.08);
 }
+
 
 /* ── Mobile Menu ───────────────────────────────── */
 .mobile-menu {
