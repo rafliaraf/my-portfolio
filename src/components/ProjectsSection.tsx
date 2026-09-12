@@ -149,18 +149,24 @@ export default function ProjectsSection() {
     setCurrentIndex((prev) => (prev === total - 1 ? 0 : prev + 1));
   };
 
-  // Keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (selectedProject) return;
-      if (e.key === 'ArrowLeft') prevSlide();
-      if (e.key === 'ArrowRight') nextSlide();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedProject]);
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
 
-  const activeProj = projects[currentIndex];
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStartX(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX === null) return;
+    const diff = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(diff) > 40) {
+      if (diff > 0) {
+        prevSlide();
+      } else {
+        nextSlide();
+      }
+    }
+    setTouchStartX(null);
+  };
 
   return (
     <section id="projects" className="relative py-20 sm:py-28 overflow-hidden select-none">
@@ -189,15 +195,22 @@ export default function ProjectsSection() {
         </div>
 
         {/* ── 3D Coverflow Showcase (Landscape) ── */}
-        <div className="relative w-full max-w-6xl mx-auto flex items-center justify-center min-h-[340px] sm:min-h-[400px] md:min-h-[460px]">
+        <div
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          className="relative w-full max-w-6xl mx-auto flex items-center justify-center min-h-[320px] sm:min-h-[400px] md:min-h-[460px] touch-pan-y"
+        >
           {/* Left Red Arrow */}
           <button
-            onClick={prevSlide}
+            onClick={(e) => {
+              e.stopPropagation();
+              prevSlide();
+            }}
             aria-label="Previous project"
-            className="absolute left-1 sm:left-3 md:left-6 z-30 p-2 sm:p-3 text-red-600 hover:text-red-400 transition-all duration-300 transform hover:scale-125 focus:outline-none drop-shadow-[0_0_12px_rgba(239,68,68,0.8)] cursor-pointer"
+            className="absolute left-0.5 sm:left-3 md:left-6 z-30 p-2 sm:p-3 text-red-500 hover:text-red-400 active:scale-95 transition-all duration-300 drop-shadow-[0_0_12px_rgba(239,68,68,0.8)] cursor-pointer"
           >
             <svg
-              className="w-8 h-8 sm:w-11 sm:h-11 stroke-current fill-none stroke-[3]"
+              className="w-7 h-7 sm:w-10 sm:h-10 stroke-current fill-none stroke-[3]"
               viewBox="0 0 24 24"
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -277,7 +290,7 @@ export default function ProjectsSection() {
                     opacity,
                     transition: 'all 0.5s cubic-bezier(0.25, 1, 0.5, 1)',
                   }}
-                  className={`absolute w-[320px] sm:w-[460px] md:w-[560px] lg:w-[620px] aspect-[16/10] cursor-pointer group transition-all duration-500 rounded-lg overflow-hidden ${
+                  className={`absolute w-[84vw] max-w-[340px] sm:w-[460px] sm:max-w-none md:w-[560px] lg:w-[620px] aspect-[16/10] cursor-pointer group transition-all duration-500 rounded-xl overflow-hidden ${
                     isCenter
                       ? 'border-[3px] border-red-600 shadow-[0_0_40px_rgba(220,38,38,0.45)]'
                       : 'border-2 border-red-600/70 brightness-75 hover:brightness-100 hover:border-red-500 shadow-[0_0_20px_rgba(220,38,38,0.2)]'
@@ -285,17 +298,16 @@ export default function ProjectsSection() {
                 >
                   {/* Landscape Image Container */}
                   <div className="relative w-full h-full bg-neutral-900 flex items-center justify-center overflow-hidden">
-                    <Image
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
                       src={project.image}
                       alt={project.title}
-                      fill
-                      unoptimized={true}
-                      sizes="(max-width: 768px) 460px, 620px"
-                      className="object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out"
+                      loading={idx === 0 ? "eager" : "lazy"}
+                      className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
                     />
 
                     {/* Dark gradient for title legibility */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/35 to-transparent opacity-90 group-hover:opacity-75 transition-opacity pointer-events-none" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90 group-hover:opacity-75 transition-opacity pointer-events-none" />
 
                     {/* Overlay Info */}
                     <div className="absolute bottom-0 inset-x-0 p-4 sm:p-5 flex flex-col justify-end text-left z-10 pointer-events-none">
@@ -328,12 +340,15 @@ export default function ProjectsSection() {
 
           {/* Right Red Arrow */}
           <button
-            onClick={nextSlide}
+            onClick={(e) => {
+              e.stopPropagation();
+              nextSlide();
+            }}
             aria-label="Next project"
-            className="absolute right-2 sm:right-4 md:right-8 z-30 p-2 sm:p-3 text-red-600 hover:text-red-400 transition-all duration-300 transform hover:scale-125 focus:outline-none drop-shadow-[0_0_12px_rgba(239,68,68,0.8)] cursor-pointer"
+            className="absolute right-0.5 sm:right-4 md:right-8 z-30 p-2 sm:p-3 text-red-500 hover:text-red-400 active:scale-95 transition-all duration-300 drop-shadow-[0_0_12px_rgba(239,68,68,0.8)] cursor-pointer"
           >
             <svg
-              className="w-8 h-8 sm:w-11 sm:h-11 stroke-current fill-none stroke-[3]"
+              className="w-7 h-7 sm:w-10 sm:h-10 stroke-current fill-none stroke-[3]"
               viewBox="0 0 24 24"
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
@@ -406,14 +421,12 @@ export default function ProjectsSection() {
 
             {/* Modal Scroll Content */}
             <div className="overflow-y-auto p-6 space-y-5">
-              <div className="relative w-full aspect-[16/9] max-h-[380px] rounded-xl overflow-hidden border border-neutral-800 bg-neutral-950/90 shadow-inner">
-                <Image
+              <div className="relative w-full aspect-[16/9] max-h-[380px] rounded-xl overflow-hidden border border-neutral-800 bg-neutral-950/90 shadow-inner flex items-center justify-center">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
                   src={selectedProject.image}
                   alt={selectedProject.title}
-                  fill
-                  unoptimized={true}
-                  className="object-contain"
-                  priority
+                  className="w-full h-full object-contain"
                 />
               </div>
 
