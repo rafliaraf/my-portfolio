@@ -98,6 +98,27 @@ const projects: Project[] = [
     image: '/images/project-simpus-antrian.jpg',
   },
   {
+    id: 'simpus-farmasi-resep',
+    date: 'Sep 2026',
+    title: 'SIMPUS – E-Prescription & Pharmacy Inventory API Testing',
+    category: 'API Testing & Quality Assurance',
+    company: 'Department of Communication and Informatics, Tasikmalaya City',
+    type: 'Apprenticeship · APTIKA Division · QA Automation',
+    description:
+      'Engineered comprehensive automated blackbox API test suites for the SIMPUS Pharmacy and E-Prescription subsystem. Verified prescription intake, clinical pharmacist reviews, dispensing execution with atomic inventory deduction, negative stock protection, and multi-thread race condition safety.',
+    responsibilities: [
+      { label: 'E-Prescription Intake:', text: 'Tested incoming prescription polling endpoints filtering by active consultation status with patient allergy screening.' },
+      { label: 'Pharmacist Clinical Review:', text: 'Verified multi-tier prescription verification (administrative, pharmaceutical, clinical) and automated contraindication detection for known patient drug allergies (HTTP 422).' },
+      { label: 'Atomic Inventory Deduction:', text: 'Asserted accurate real-time stock deductions upon dispensing execution and verified comprehensive stock mutation card (kartu stok) audit logging.' },
+      { label: 'Negative Stock Protection:', text: 'Enforced strict zero-deficit validation, ensuring dispensing requests exceeding available physical stock trigger automatic rollbacks without minus mutations.' },
+      { label: 'Race Condition Concurrency Safety:', text: 'Simulated 5 concurrent multi-thread dispensing requests under critical stock levels, asserting thread lock integrity and preventing over-dispensing.' },
+      { label: 'Automated Test Suites:', text: 'Constructed complete Postman v2.1.0 test suites and Python test runners achieving 100% passed assertions.' },
+    ],
+    tags: ['API Testing', 'Postman', 'Python', 'Inventory System', 'Negative Stock', 'Race Condition', 'SIMPUS'],
+    link: 'https://github.com/rafliaraf/Uji-Farmasi-Resep-Elektronik-Logistik-Obat',
+    image: '/images/project-simpus-farmasi.png',
+  },
+  {
     id: 'sipp',
     date: 'Aug 2026 – Present',
     title: 'SIPP KOTA TASIKMALAYA',
