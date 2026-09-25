@@ -198,7 +198,7 @@ export default function ProjectsSection() {
         </div>
 
         {/* ── Featured Wide Showcase Carousel (Matching Reference Screenshot) ── */}
-        <div className="relative w-full max-w-6xl mx-auto flex items-center justify-center min-h-[360px] sm:min-h-[420px] md:min-h-[460px]">
+        <div className="relative w-full max-w-6xl mx-auto flex items-center justify-center min-h-[410px] sm:min-h-[420px] md:min-h-[460px]">
           {/* Circular Left Arrow Button (Bordered, semi-transparent) */}
           <button
             onClick={prevSlide}
@@ -211,7 +211,7 @@ export default function ProjectsSection() {
           </button>
 
           {/* Slider Stage Container */}
-          <div className="relative w-full h-[360px] sm:h-[400px] md:h-[420px] flex items-center justify-center overflow-hidden">
+          <div className="relative w-full h-[410px] sm:h-[400px] md:h-[420px] flex items-center justify-center overflow-hidden">
             {projects.map((project, idx) => {
               let offset = idx - currentIndex;
               if (offset > total / 2) offset -= total;
@@ -262,16 +262,16 @@ export default function ProjectsSection() {
                     opacity,
                     transition: 'all 0.6s cubic-bezier(0.25, 1, 0.5, 1)',
                   }}
-                  className={`absolute w-[92vw] max-w-[420px] sm:max-w-[560px] md:max-w-[700px] lg:max-w-[760px] h-[340px] sm:h-[370px] md:h-[390px] rounded-[32px] sm:rounded-[36px] overflow-hidden cursor-pointer transition-all duration-500 border ${
+                  className={`absolute w-[92vw] max-w-[420px] sm:max-w-[560px] md:max-w-[700px] lg:max-w-[760px] h-[390px] sm:h-[370px] md:h-[390px] rounded-[24px] sm:rounded-[36px] overflow-hidden cursor-pointer transition-all duration-500 border ${
                     isCenter
                       ? 'border-white/20 shadow-[0_20px_60px_rgba(0,0,0,0.85)] bg-neutral-900/90 backdrop-blur-xl'
                       : 'border-white/10 shadow-2xl bg-neutral-950/80 pointer-events-auto'
                   }`}
                 >
                   {/* Split Layout: Left Image + Right Content */}
-                  <div className="w-full h-full grid grid-cols-1 sm:grid-cols-12 relative">
+                  <div className="w-full h-full flex flex-col sm:grid sm:grid-cols-12 relative">
                     {/* Left Half: Aesthetic Image Graphic */}
-                    <div className="sm:col-span-6 relative h-[160px] sm:h-full bg-neutral-950 overflow-hidden">
+                    <div className="w-full sm:col-span-6 relative h-[150px] sm:h-full bg-neutral-950 overflow-hidden flex-shrink-0">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={project.image}
@@ -281,12 +281,12 @@ export default function ProjectsSection() {
                       <div className="absolute inset-0 bg-gradient-to-t sm:bg-gradient-to-r from-transparent via-black/20 to-neutral-900/90 sm:to-neutral-900" />
                     </div>
 
-                    {/* Right Half: Content Info (Matching Reference Layout) */}
-                    <div className="sm:col-span-6 p-5 sm:p-7 md:p-8 flex flex-col justify-between bg-neutral-900/95 sm:bg-transparent">
+                    {/* Right Half: Content Info */}
+                    <div className="flex-1 sm:col-span-6 p-4 sm:p-7 md:p-8 flex flex-col justify-between bg-neutral-900/95 sm:bg-transparent overflow-hidden">
                       <div>
                         {/* Title with Courier/Sans Tech Look */}
                         <h3
-                          className="text-lg sm:text-xl md:text-2xl font-bold text-white leading-snug line-clamp-2"
+                          className="text-base sm:text-xl md:text-2xl font-bold text-white leading-snug line-clamp-2"
                           style={{ fontFamily: "'Inter', sans-serif" }}
                         >
                           {project.title}
@@ -294,7 +294,7 @@ export default function ProjectsSection() {
 
                         {/* Description Paragraph */}
                         <p
-                          className="text-xs sm:text-sm text-neutral-300/85 mt-2.5 sm:mt-3 leading-relaxed line-clamp-3 font-normal"
+                          className="text-xs sm:text-sm text-neutral-300/85 mt-2 sm:mt-3 leading-relaxed line-clamp-2 sm:line-clamp-3 font-normal"
                           style={{ fontFamily: "'Inter', sans-serif" }}
                         >
                           {project.description}

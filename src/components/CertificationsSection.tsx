@@ -90,7 +90,7 @@ export default function CertificationsSection() {
         </div>
 
         {/* ── Featured Wide Showcase Carousel (Matching Reference Screenshot) ── */}
-        <div className="relative w-full max-w-6xl mx-auto flex items-center justify-center min-h-[360px] sm:min-h-[420px] md:min-h-[460px]">
+        <div className="relative w-full max-w-6xl mx-auto flex items-center justify-center min-h-[410px] sm:min-h-[420px] md:min-h-[460px]">
           {/* Circular Left Arrow Button */}
           <button
             onClick={() => setActiveCertIdx((prev) => (prev === 0 ? certifications.length - 1 : prev - 1))}
@@ -103,7 +103,7 @@ export default function CertificationsSection() {
           </button>
 
           {/* Slider Stage Container */}
-          <div className="relative w-full h-[360px] sm:h-[400px] md:h-[420px] flex items-center justify-center overflow-hidden">
+          <div className="relative w-full h-[410px] sm:h-[400px] md:h-[420px] flex items-center justify-center overflow-hidden">
             {certifications.map((cert, idx) => {
               let offset = idx - activeCertIdx;
               const totalCert = certifications.length;
@@ -155,16 +155,16 @@ export default function CertificationsSection() {
                     opacity,
                     transition: 'all 0.6s cubic-bezier(0.25, 1, 0.5, 1)',
                   }}
-                  className={`absolute w-[92vw] max-w-[420px] sm:max-w-[560px] md:max-w-[700px] lg:max-w-[760px] h-[340px] sm:h-[370px] md:h-[390px] rounded-[32px] sm:rounded-[36px] overflow-hidden cursor-pointer transition-all duration-500 border ${
+                  className={`absolute w-[92vw] max-w-[420px] sm:max-w-[560px] md:max-w-[700px] lg:max-w-[760px] h-[390px] sm:h-[370px] md:h-[390px] rounded-[24px] sm:rounded-[36px] overflow-hidden cursor-pointer transition-all duration-500 border ${
                     isCenter
                       ? 'border-white/20 shadow-[0_20px_60px_rgba(0,0,0,0.85)] bg-neutral-900/90 backdrop-blur-xl'
                       : 'border-white/10 shadow-2xl bg-neutral-950/80 pointer-events-auto'
                   }`}
                 >
                   {/* Split Layout: Left Image + Right Content */}
-                  <div className="w-full h-full grid grid-cols-1 sm:grid-cols-12 relative">
+                  <div className="w-full h-full flex flex-col sm:grid sm:grid-cols-12 relative">
                     {/* Left Half: Certificate Artwork/Photo */}
-                    <div className="sm:col-span-6 relative h-[160px] sm:h-full bg-neutral-950 overflow-hidden">
+                    <div className="w-full sm:col-span-6 relative h-[150px] sm:h-full bg-neutral-950 overflow-hidden flex-shrink-0">
                       <Image
                         src={cert.image}
                         alt={cert.title}
@@ -176,13 +176,13 @@ export default function CertificationsSection() {
                     </div>
 
                     {/* Right Half: Content Info */}
-                    <div className="sm:col-span-6 p-5 sm:p-7 md:p-8 flex flex-col justify-between bg-neutral-900/95 sm:bg-transparent">
+                    <div className="flex-1 sm:col-span-6 p-4 sm:p-7 md:p-8 flex flex-col justify-between bg-neutral-900/95 sm:bg-transparent overflow-hidden">
                       <div>
                         <span className="text-[11px] font-bold text-emerald-400 uppercase tracking-widest block mb-1">
                           Verified Credential · {cert.year}
                         </span>
                         <h3
-                          className="text-lg sm:text-xl md:text-2xl font-bold text-white leading-snug line-clamp-2"
+                          className="text-base sm:text-xl md:text-2xl font-bold text-white leading-snug line-clamp-2"
                           style={{ fontFamily: "'Inter', sans-serif" }}
                         >
                           {cert.title}
