@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Presentasi Portofolio — Muhammad Rafli Aolia Ansori</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Syne:wght@700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #09090b;
+      --card-bg: rgba(24, 24, 27, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --accent: #ef4444;
+      --accent-glow: rgba(239, 68, 68, 0.35);
+      --text: #f4f4f5;
+      --text-muted: #a1a1aa;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      user-select: none;
+    }
+
+    /* Ambient Glow Background */
+    .bg-glow {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 70vw;
+      height: 70vh;
+      background: radial-gradient(circle, rgba(220, 38, 38, 0.12) 0%, rgba(0, 0, 0, 0) 70%);
+      filter: blur(80px);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Top Bar Header */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(9, 9, 11, 0.8);
+      backdrop-filter: blur(16px);
+      z-index: 50;
+    }
+
+    .brand {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--accent);
+    }
+
+    .progress-bar-container {
+      flex: 1;
+      max-width: 320px;
+      margin: 0 40px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #b91c1c, var(--accent));
+      width: 10%;
+      transition: width 0.4s ease;
+      box-shadow: 0 0 10px var(--accent-glow);
+    }
+
+    .counter {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* Slides Deck Container */
+    .deck-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 90px 40px 100px 40px;
+      z-index: 10;
+    }
+
+    .slide {
+      position: absolute;
+      width: 100%;
+      max-width: 1100px;
+      height: calc(100vh - 190px);
+      max-height: 640px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px) scale(0.97);
+      transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    /* Card Box Design */
+    .slide-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 40px 46px;
+      backdrop-filter: blur(24px);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(239, 68, 68, 0.6), transparent);
+    }
+
+    /* Typography inside slides */
+    .tagline {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      margin-bottom: 12px;
+      font-family: 'Syne', sans-serif;
+    }
+
+    h1.hero-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 3.4rem;
+      font-weight: 900;
+      line-height: 1.05;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+
+    h1.hero-title span {
+      color: var(--accent);
+      text-shadow: 0 0 25px var(--accent-glow);
+    }
+
+    h2.slide-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1.2;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+
+    .slide-subtitle {
+      font-size: 0.92rem;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .slide-desc {
+      font-size: 1.02rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      margin-bottom: 24px;
+      text-align: justify;
+    }
+
+    /* 2 Column Content Layout */
+    .two-cols {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 40px;
+      align-items: center;
+      height: 100%;
+    }
+
+    .bullet-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .bullet-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.92rem;
+      color: #e4e4e7;
+      line-height: 1.5;
+    }
+
+    .bullet-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      margin-top: 8px;
+      flex-shrink: 0;
+      box-shadow: 0 0 8px var(--accent);
+    }
+
+    .badge-pill-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .badge-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      padding: 5px 12px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #d4d4d8;
+    }
+
+    /* Metric / Stat Cards */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .stat-card {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 18px;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* Bottom Control Bar */
+    footer.controls {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      background: rgba(9, 9, 11, 0.85);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid var(--card-border);
+      z-index: 50;
+    }
+
+    .nav-hints {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .key-badge {
+      display: inline-block;
+      padding: 2px 7px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: #fff;
+    }
+
+    .btn-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border-radius: 100px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    .btn-primary:hover {
+      background: #dc2626;
+      box-shadow: 0 0 28px rgba(239, 68, 68, 0.6);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: #fff;
+      border: 1px solid var(--card-border);
+    }
+
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    /* Thumbnail Box inside Slide */
+    .image-preview-box {
+      width: 100%;
+      height: 280px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+      position: relative;
+      background: #000;
+    }
+
+    .image-preview-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .two-cols {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      .image-preview-box {
+        display: none;
+      }
+      h1.hero-title {
+        font-size: 2.3rem;
+      }
+      .stat-grid {
+        grid-template-columns: 1fr;
+      }
+      header, footer.controls {
+        padding: 0 20px;
+      }
+      .nav-hints {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-glow"></div>
+
+  <!-- Top Header Navigation -->
+  <header>
+    <div class="brand">
+      <div class="brand-dot"></div>
+      <span>Muhammad Rafli</span>
+    </div>
+
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div class="counter" id="slideCounter">01 / 07</div>
+  </header>
+
+  <!-- Presentation Slides Deck -->
+  <div class="deck-container">
+
+    <!-- Slide 1: Cover / Introduction -->
+    <div class="slide active" id="slide-0">
+      <div class="slide-card">
+        <div>
+          <div class="tagline">Interactive Portfolio Presentation · 2026</div>
+          <h1 class="hero-title">
+            Web<br><span>Developer</span>
+          </h1>
+          <p class="slide-desc" style="max-width: 720px; font-size: 1.15rem;">
+            Halo! Saya Muhammad Rafli Aolia Ansori — Web Developer & Quality Assurance Engineer. 
+            Berfokus pada perancangan arsitektur web modern yang skalabel, pengujian otomatis API berstandar internasional, serta pengalaman visual interaktif tanpa cela.
+          </p>
+        </div>
+
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-num">6+</div>
+            <div class="stat-label">Enterprise & Public Projects</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">100%</div>
+            <div class="stat-label">API Automation Test Pass</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">4+</div>
+            <div class="stat-label">Verified Certifications</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2: Project 1 - SATU RUMAH PERWASKIM -->
+    <div class="slide" id="slide-1">
+      <div class="slide-card">
+        <div>
+          <div class="tagline">Featured Project · Lead QA & System Architecture</div>
+          <h2 class="slide-title">SATU RUMAH PERWASKIM</h2>
+          <div class="slide-subtitle">Dinas Perumahan & Kawasan Permukiman Kota Tasikmalaya</div>
+        </div>
+
+        <div class="two-cols">
+          <div>
+            <p class="slide-desc">
+              Platform layanan publik terpadu untuk pengajuan dan verifikasi berkas Site Plan perumahan serta Prasarana, Sarana, dan Utilitas Umum (PSU) berbasis dual-client (Laravel 12 REST API & Flutter Mobile).
+            </p>
+            <ul class="bullet-list">
+              <li class="bullet-item">
+                <div class="bullet-dot"></div>
+                <div><strong>Lead QA & Perencanaan:</strong> Menyusun dokumen BRD, SRS, kamus data, dan koordinasi 9-week development sprints.</div>
+              </li>
+              <li class="bullet-item">
+                <div class="bullet-dot"></div>
+                <div><strong>API & Sanctum Auth:</strong> Mengintegrasikan Flutter mobile dengan Laravel 12 via Sanctum token dan role-based access.</div>
+              </li>
+              <li class="bullet-item">
+                <div class="bullet-dot"></div>
+                <div><strong>CAD & PDF Parsing:</strong> Validasi MIME CAD (.dwg/.dxf) dan auto-generate sertifikat Berita Acara inspeksi lapangan.</div>
+              </li>
+            </ul>
+            <div class="badge-pill-group">
+              <span class="badge-pill">Laravel 12</span>
+              <span class="badge-pill">Flutter Mobile</span>
+              <span class="badge-pill">Sanctum Token</span>
+              <span class="badge-pill">Blackbox Testing</span>
+              <span class="badge-pill">UAT</span>
+            </div>
+          </div>
+
+          <div class="image-preview-box">
+            <img src="./images/project-saturumah.png" alt="SATU RUMAH PERWASKIM" onerror="this.src='https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=800'">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Project 2 - SIMPUS SATUSEHAT Kemenkes -->
+    <div class="slide" id="slide-2">
+      <div class="slide-card">
+        <div>
+          <div class="tagline">Healthcare Interoperability · Backend & API Testing</div>
+          <h2 class="slide-title">SIMPUS – SATUSEHAT Integration</h2>
+          <div class="slide-subtitle">Kementerian Kesehatan RI (HL7 FHIR R4 Standards)</div>
+        </div>
+
+        <div class="two-cols">
+          <div>
+            <p class="slide-desc">
+              Jembatan interoperabilitas data rekam medis Puskesmas dengan platform nasional Kemenkes SATUSEHAT. Mengadopsi arsitektur HL7 FHIR R4 dengan enkripsi OAuth 2.0.
+            </p>
+            <ul class="bullet-list">
+              <li class="bullet-item">
+                <div class="bullet-dot"></div>
+                <div><strong>OAuth 2.0 Token Lifecycle:</strong> Penanganan otomatis pengambilan dan penyegaran token saat kedaluwarsa.</div>
+              </li>
+              <li class="bullet-item">
+                <div class="bullet-dot"></div>
+                <div><strong>Sinkronisasi Encounter & ICD-10:</strong> Pemetaan status konsultasi dan kode diagnosis standar WHO linked ke nomor IHS pasien.</div>
+              </li>
+              <li class="bullet-item">
+                <div class="bullet-dot"></div>
+                <div><strong>Automated Postman Suites:</strong> Pengujian otomatis skema FHIR guna mencegah terjadinya HTTP 504 gateway timeout.</div>
+              </li>
+            </ul>
+            <div class="badge-pill-group">
+              <span class="badge-pill">HL7 FHIR R4</span>
+              <span class="badge-pill">OAuth 2.0</span>
+              <span class="badge-pill">Node.js</span>
+              <span class="badge-pill">Postman Suite</span>
+              <span class="badge-pill">ICD-10</span>
+            </div>
+          </div>
+
+          <div class="image-preview-box">
+            <img src="./images/project-satusehat.png" alt="SATUSEHAT FHIR" onerror="this.src='https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=800'">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4: Project 3 & 4 - SIMPUS Testing & QA Suites -->
+    <div class="slide" id="slide-3">
+      <div class="slide-card">
+        <div>
+          <div class="tagline">Quality Assurance · Diskominfo Kota Tasikmalaya</div>
+          <h2 class="slide-title">SIMPUS QA & Security Testing</h2>
+          <div class="slide-subtitle">Billing, Farmasi, & Reservasi Antrian Mandiri Kiosk</div>
+        </div>
+
+        <div class="two-cols">
+          <div>
+            <p class="slide-desc">
+              Serangkaian pengujian otomatis end-to-end API untuk modul layanan inti Puskesmas: Kasir/Invoice, Farmasi/Resep Elektronik, serta Kiosk Antrian Pasien.
+            </p>
+            <ul class="bullet-list">
+              <li class="bullet-item">
+                <div class="bullet-dot"></div>
+                <div><strong>Proteksi Idempotency:</strong> Header Idempotency-Key untuk menjamin transaksi billing QRIS tidak mengalami double-charge.</div>
+              </li>
+              <li class="bullet-item">
+                <div class="bullet-dot"></div>
+                <div><strong>Race Condition & Stok Negatif:</strong> Simulasi konkurensi request farmasi untuk menguji database locking obat.</div>
+              </li>
+              <li class="bullet-item">
+                <div class="bullet-dot"></div>
+                <div><strong>Validasi Kuota Dokter:</strong> Pengujian handling HTTP 422 saat jadwal dokter penuh dan pengecekan alergi pasien.</div>
+              </li>
+            </ul>
+            <div class="badge-pill-group">
+              <span class="badge-pill">API Automation</span>
+              <span class="badge-pill">Postman & Python</span>
+              <span class="badge-pill">Idempotency</span>
+              <span class="badge-pill">Concurrency Locking</span>
+            </div>
+          </div>
+
+          <div class="image-preview-box">
+            <img src="./images/project-simpus-billing.jpg" alt="SIMPUS Testing" onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800'">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 5: Project 5 - SIPP KOTA TASIKMALAYA -->
+    <div class="slide" id="slide-4">
+      <div class="slide-card">
+        <div>
+          <div class="tagline">Public Sector Platform · Diskominfo APTIKA</div>
+          <h2 class="slide-title">SIPP KOTA TASIKMALAYA</h2>
+          <div class="slide-subtitle">Sistem Informasi Pelayanan Publik Terpadu</div>
+        </div>
+
+        <div class="two-cols">
+          <div>
+            <p class="slide-desc">
+              Portal direktori dan katalog layanan publik Kota Tasikmalaya yang menghubungkan seluruh dinas teknis dengan masyarakat secara transparan dan responsif.
+            </p>
+            <ul class="bullet-list">
+              <li class="bullet-item">
+                <div class="bullet-dot"></div>
+                <div><strong>Katalog Layanan Publik:</strong> Pembaruan dan standardisasi data informasi layanan antar instansi OPD.</div>
+              </li>
+              <li class="bullet-item">
+                <div class="bullet-dot"></div>
+                <div><strong>Frontend Responsive:</strong> Pengembangan tampilan modern dengan Laravel Blade dan Tailwind CSS.</div>
+              </li>
+              <li class="bullet-item">
+                <div class="bullet-dot"></div>
+                <div><strong>Integrasi & Testing:</strong> Verifikasi kompatibilitas formulir, tautan layanan, serta performa lintas perangkat.</div>
+              </li>
+            </ul>
+            <div class="badge-pill-group">
+              <span class="badge-pill">Laravel Blade</span>
+              <span class="badge-pill">Tailwind CSS</span>
+              <span class="badge-pill">REST API</span>
+              <span class="badge-pill">Public Sector Portal</span>
+            </div>
+          </div>
+
+          <div class="image-preview-box">
+            <img src="./images/project-sippn.png" alt="SIPP Tasikmalaya" onerror="this.src='https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800'">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 6: Licenses & Certifications -->
+    <div class="slide" id="slide-5">
+      <div class="slide-card">
+        <div>
+          <div class="tagline">Competencies & Professional Credentials</div>
+          <h2 class="slide-title">Verified Certifications</h2>
+          <div class="slide-subtitle">Sertifikasi Resmi Dicoding Indonesia & Industri</div>
+        </div>
+
+        <div class="two-cols">
+          <div>
+            <p class="slide-desc">
+              Memiliki landasan pemahaman rekayasa perangkat lunak yang kokoh dari pemrograman dasar berkinerja tinggi hingga manajemen siklus hidup proyek digital.
+            </p>
+            <ul class="bullet-list">
+              <li class="bullet-item">
+                <div class="bullet-dot"></div>
+                <div><strong>Belajar Dasar Manajemen Proyek (2026):</strong> Dicoding Indonesia · ID: 1RXYD0283XVM (Agile, Sprint, Waterfall, Risk Planning).</div>
+              </li>
+              <li class="bullet-item">
+                <div class="bullet-dot"></div>
+                <div><strong>Pemrograman Java (2026):</strong> Dicoding Indonesia · ID: 2VX30M23JXYQ (OOP, Collections, Robust Design).</div>
+              </li>
+              <li class="bullet-item">
+                <div class="bullet-dot"></div>
+                <div><strong>Pemrograman C (2024):</strong> Dicoding Indonesia · ID: 6RPNVY13QZ2M (Memory Management, Pointers, Algorithms).</div>
+              </li>
+            </ul>
+            <div class="badge-pill-group">
+              <span class="badge-pill">Agile Management</span>
+              <span class="badge-pill">Java OOP</span>
+              <span class="badge-pill">C Programming</span>
+              <span class="badge-pill">Verified Credentials</span>
+            </div>
+          </div>
+
+          <div class="image-preview-box">
+            <img src="./images/cert-manajemen-proyek.png" alt="Dicoding Certificate" onerror="this.src='https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=800'">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 7: Closing & Contact Info -->
+    <div class="slide" id="slide-6">
+      <div class="slide-card" style="text-align: center; align-items: center; justify-content: center;">
+        <div class="tagline" style="margin-bottom: 20px;">Ready For Collaboration</div>
+        <h1 class="hero-title" style="font-size: 3.2rem; margin-bottom: 16px;">
+          Terima <span>Kasih!</span>
+        </h1>
+        <p class="slide-desc" style="max-width: 600px; text-align: center; margin: 0 auto 32px auto;">
+          Mari terhubung untuk kolaborasi pengembangan arsitektur web modern, API testing berkinerja tinggi, dan solusi digital yang teruji.
+        </p>
+
+        <div style="display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;">
+          <a href="mailto:muhammadrafli0876@gmail.com" class="btn btn-primary" style="padding: 14px 32px; font-size: 0.95rem;">
+            ✉ Email: muhammadrafli0876@gmail.com
+          </a>
+          <a href="https://github.com/rafliaraf" target="_blank" class="btn btn-outline" style="padding: 14px 28px; font-size: 0.95rem;">
+            GitHub: @rafliaraf
+          </a>
+          <a href="https://www.linkedin.com/in/muhammadrafliaoliaa/" target="_blank" class="btn btn-outline" style="padding: 14px 28px; font-size: 0.95rem;">
+            LinkedIn Profile
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Navigation Bar Controls -->
+  <footer class="controls">
+    <div class="nav-hints">
+      <span>Gunakan tombol panah keyboard:</span>
+      <span class="key-badge">←</span>
+      <span class="key-badge">→</span>
+      <span style="margin-left: 8px;">atau tombol navigasi</span>
+    </div>
+
+    <div class="btn-group">
+      <button class="btn btn-outline" id="prevBtn" onclick="prevSlide()" disabled>← Previous</button>
+      <button class="btn btn-primary" id="nextBtn" onclick="nextSlide()">Next →</button>
+    </div>
+  </footer>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let currentSlide = 0;
+
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const progressBar = document.getElementById('progressBar');
+    const slideCounter = document.getElementById('slideCounter');
+
+    function updateSlide(index) {
+      slides.forEach((s, idx) => {
+        s.classList.toggle('active', idx === index);
+      });
+
+      // Update button state
+      prevBtn.disabled = index === 0;
+      nextBtn.disabled = index === totalSlides - 1;
+
+      // Update progress and counter
+      const progressPercent = ((index + 1) / totalSlides) * 100;
+      progressBar.style.width = progressPercent + '%';
+      slideCounter.textContent = String(index + 1).padStart(2, '0') + ' / ' + String(totalSlides).padStart(2, '0');
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides - 1) {
+        currentSlide++;
+        updateSlide(currentSlide);
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateSlide(currentSlide);
+      }
+    }
+
+    // Keyboard navigation (Arrow keys & Spacebar)
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevSlide();
+      }
+    });
+
+    // Touch swipe support for mobile/tablet presentation
+    let touchStartX = null;
+    window.addEventListener('touchstart', (e) => {
+      touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+
+    window.addEventListener('touchend', (e) => {
+      if (touchStartX === null) return;
+      const diff = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(diff) > 40) {
+        if (diff > 0) prevSlide();
+        else nextSlide();
+      }
+      touchStartX = null;
+    }, { passive: true });
+  </script>
+</body>
+</html>
