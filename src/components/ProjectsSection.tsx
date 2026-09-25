@@ -456,10 +456,15 @@ export default function ProjectsSection() {
                   href={selectedProject.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs font-semibold text-red-400 hover:text-red-300 underline underline-offset-4"
+                  className="text-xs font-semibold text-red-400 hover:text-red-300 underline underline-offset-4 flex items-center gap-1.5"
                   style={{ fontFamily: "'Inter', sans-serif" }}
                 >
-                  View Code on GitHub →
+                  <span>
+                    {selectedProject.link.includes('github.com')
+                      ? 'View Code on GitHub'
+                      : 'Visit Live Website'}
+                  </span>
+                  <span>→</span>
                 </a>
               )}
             </div>
