@@ -20,6 +20,18 @@ interface Certification {
 
 const certifications: Certification[] = [
   {
+    id: 'dicoding-manajemen-proyek',
+    title: 'Belajar Dasar Manajemen Proyek',
+    issuer: 'Dicoding Indonesia',
+    issueDate: 'Issued 19 Sep 2026',
+    expiryDate: 'Expires 19 Sep 2029',
+    year: '2026',
+    credentialId: '1RXYD0283XVM',
+    credentialUrl: 'https://www.dicoding.com/certificates/1RXYD0283XVM',
+    skills: ['Project Management Fundamentals', 'Agile & Waterfall', 'Sprint Planning', 'Risk & Resource Management'],
+    image: '/images/cert-manajemen-proyek.png',
+  },
+  {
     id: 'dicoding-c',
     title: 'Pemrograman C',
     issuer: 'Dicoding Indonesia',
