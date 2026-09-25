@@ -112,19 +112,19 @@ export default function TechTicker() {
   ];
 
   return (
-    <section className="relative border-y border-neutral-800/80 bg-neutral-950/70 backdrop-blur-md overflow-hidden py-4 select-none">
+    <section className="relative border-y border-white/[0.08] bg-black/20 backdrop-blur-md overflow-hidden py-4 select-none">
       {/* Subtle edge fade gradient for seamless look */}
-      <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-neutral-950 to-transparent z-10" />
-      <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-neutral-950 to-transparent z-10" />
+      <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-black/60 to-transparent z-10" />
+      <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-black/60 to-transparent z-10" />
 
       <div className="flex animate-marquee whitespace-nowrap items-center">
         {[...stack, ...stack, ...stack].map((tech, i) => (
           <div
             key={i}
-            className="inline-flex items-center gap-2.5 mx-5 sm:mx-7 px-3.5 py-1.5 rounded-full bg-neutral-900/70 border border-neutral-800/80 hover:border-neutral-700 hover:bg-neutral-800/50 transition-all duration-300"
+            className="inline-flex items-center gap-2.5 mx-5 sm:mx-7 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/10 hover:border-white/30 hover:bg-white/[0.08] backdrop-blur-md shadow-sm transition-all duration-300"
           >
             {tech.icon}
-            <span className="text-sm font-semibold text-neutral-200 tracking-wide">
+            <span className="text-sm font-medium text-neutral-300 tracking-wide">
               {tech.name}
             </span>
           </div>

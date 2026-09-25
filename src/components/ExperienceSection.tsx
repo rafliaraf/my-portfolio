@@ -113,17 +113,20 @@ export default function ExperienceSection() {
   };
 
   return (
-    <section id="experience" className="relative py-24 sm:py-32 bg-dark-secondary/30 border-t border-neutral-800/40 select-none overflow-hidden">
+    <section id="experience" className="relative py-24 sm:py-32 bg-transparent border-t border-white/[0.08] select-none overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section Header */}
         <div className="text-center mb-16 sm:mb-20" data-aos="zoom-in">
-          <p
-            className="text-xs sm:text-sm font-semibold text-red-500 uppercase mb-2 tracking-[0.1em]"
-            style={{ letterSpacing: '0.1em' }}
-          >
-            Career Progression
-          </p>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/[0.04] border border-white/10 backdrop-blur-md mb-3">
+            <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+            <span
+              className="text-[11px] sm:text-xs font-semibold text-neutral-300 uppercase tracking-widest"
+              style={{ fontFamily: "'Syne', sans-serif" }}
+            >
+              Career Progression
+            </span>
+          </div>
           <h2
             className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight"
             style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700 }}
@@ -131,113 +134,148 @@ export default function ExperienceSection() {
             Work Experience
           </h2>
           <p
-            className="text-sm sm:text-base text-[#B3B3B3] font-normal mt-2 max-w-xl mx-auto leading-[1.65]"
+            className="text-sm sm:text-base text-neutral-300/80 font-normal mt-2 max-w-xl mx-auto leading-[1.65]"
             style={{ fontFamily: "'Inter', sans-serif" }}
           >
-            Past roles in graphic design, technical merchandise production, and internships before focusing on back-end development.
+            Past roles in graphic design, technical merchandise production, and internships leading to professional web &amp; software development.
           </p>
         </div>
 
-        {/* ── Desktop Interactive Fan Fanned Cards Deck ── */}
-        <div className="hidden lg:flex flex-col items-center justify-center min-h-[560px] relative my-6">
-          <div className="relative w-full max-w-[420px] h-[520px] flex items-center justify-center">
+        {/* ── Featured Wide Showcase Carousel (Matching Reference Screenshot) ── */}
+        <div className="relative w-full max-w-6xl mx-auto flex items-center justify-center min-h-[360px] sm:min-h-[420px] md:min-h-[460px]">
+          {/* Circular Left Arrow Button */}
+          <button
+            onClick={() => setActiveIdx((prev) => (prev === 0 ? experiences.length - 1 : prev - 1))}
+            aria-label="Previous experience"
+            className="absolute left-1 sm:left-2 md:left-6 z-30 w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-black/40 hover:bg-black/70 border border-white/20 hover:border-white/50 text-white flex items-center justify-center backdrop-blur-md transition-all duration-300 active:scale-95 shadow-xl cursor-pointer"
+          >
+            <svg className="w-5 h-5 sm:w-6 sm:h-6 stroke-current fill-none stroke-[2.5]" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+
+          {/* Slider Stage Container */}
+          <div className="relative w-full h-[360px] sm:h-[400px] md:h-[420px] flex items-center justify-center overflow-hidden">
             {experiences.map((exp, idx) => {
-              const fanStyle = getFanTransform(idx);
-              const isActive = idx === activeIdx;
+              let offset = idx - activeIdx;
+              const totalExp = experiences.length;
+              if (offset > totalExp / 2) offset -= totalExp;
+              if (offset < -totalExp / 2) offset += totalExp;
+
+              const isCenter = offset === 0;
+              const isPrev = offset === -1;
+              const isNext = offset === 1;
+              const isVisible = Math.abs(offset) <= 1;
+
+              if (!isVisible) return null;
+
+              let translateX = '0%';
+              let scale = 0.85;
+              let zIndex = 10;
+              let opacity = 0.28;
+
+              if (isCenter) {
+                translateX = '0%';
+                scale = 1;
+                zIndex = 25;
+                opacity = 1;
+              } else if (isPrev) {
+                translateX = '-68%';
+                scale = 0.88;
+                zIndex = 15;
+                opacity = 0.28;
+              } else if (isNext) {
+                translateX = '68%';
+                scale = 0.88;
+                zIndex = 15;
+                opacity = 0.28;
+              }
 
               return (
                 <div
                   key={exp.id}
                   onClick={() => {
-                    if (isActive) {
+                    if (isCenter) {
                       setModalExp(exp);
                     } else {
                       setActiveIdx(idx);
                     }
                   }}
                   style={{
-                    transform: fanStyle.transform,
-                    zIndex: fanStyle.zIndex,
-                    transition: 'all 0.5s cubic-bezier(0.25, 1, 0.5, 1)',
+                    transform: `translateX(${translateX}) scale(${scale})`,
+                    zIndex,
+                    opacity,
+                    transition: 'all 0.6s cubic-bezier(0.25, 1, 0.5, 1)',
                   }}
-                  className={`absolute w-[320px] h-[480px] rounded-[32px] p-6 cursor-pointer border-2 shadow-2xl flex flex-col justify-between overflow-hidden bg-gradient-to-b ${exp.cardColor} ${
-                    isActive
-                      ? 'border-white/90 shadow-[0_20px_50px_rgba(0,0,0,0.8)]'
-                      : 'border-white/20 hover:border-white/50 opacity-90 hover:opacity-100'
+                  className={`absolute w-[92vw] max-w-[420px] sm:max-w-[560px] md:max-w-[700px] lg:max-w-[760px] h-[340px] sm:h-[370px] md:h-[390px] rounded-[32px] sm:rounded-[36px] overflow-hidden cursor-pointer transition-all duration-500 border ${
+                    isCenter
+                      ? 'border-white/20 shadow-[0_20px_60px_rgba(0,0,0,0.85)] bg-neutral-900/90 backdrop-blur-xl'
+                      : 'border-white/10 shadow-2xl bg-neutral-950/80 pointer-events-auto'
                   }`}
                 >
-                  {/* Top Bar: Title & Pill Chip */}
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <h3
-                        className="text-2xl font-bold text-white tracking-wide"
-                        style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700 }}
-                      >
-                        {exp.organization}
-                      </h3>
-                      <p
-                        className="text-xs text-white/70 uppercase tracking-widest mt-0.5 font-medium"
-                        style={{ fontFamily: "'Inter', sans-serif" }}
-                      >
-                        {exp.badgeTag}
-                      </p>
+                  {/* Split Layout: Left Image + Right Content */}
+                  <div className="w-full h-full grid grid-cols-1 sm:grid-cols-12 relative">
+                    {/* Left Half: Aesthetic Image Graphic */}
+                    <div className="sm:col-span-6 relative h-[160px] sm:h-full bg-neutral-950 overflow-hidden">
+                      <Image
+                        src={exp.image}
+                        alt={exp.organization}
+                        fill
+                        unoptimized={true}
+                        className="object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t sm:bg-gradient-to-r from-transparent via-black/20 to-neutral-900/90 sm:to-neutral-900" />
                     </div>
 
-                    {/* Circular / Pill Counter Badge */}
-                    <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white text-xs font-semibold">
-                      <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                      <span style={{ fontFamily: "var(--font-mono), 'JetBrains Mono', monospace" }}>
-                        {exp.statBadge}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Center Character/Artwork Image */}
-                  <div className="relative w-full h-[220px] flex items-center justify-center my-auto overflow-hidden rounded-2xl border border-white/10 group-hover:scale-105 transition-transform duration-500">
-                    <Image
-                      src={exp.image}
-                      alt={exp.organization}
-                      fill
-                      unoptimized={true}
-                      className="object-cover object-center"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                    
-                    {/* Period badge inside artwork */}
-                    <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between">
-                      <span
-                        className="text-[11px] text-white/90 font-medium px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-sm border border-white/15"
-                        style={{ fontFamily: "var(--font-mono), 'JetBrains Mono', monospace" }}
-                      >
-                        {exp.period}
-                      </span>
-                      <span className="text-[11px] text-red-400 font-semibold uppercase tracking-wider">
-                        Click Detail
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Bottom: Role & Scope Tags */}
-                  <div className="pt-3 border-t border-white/15">
-                    <p
-                      className="text-sm font-semibold text-white truncate"
-                      style={{ fontFamily: "'Inter', sans-serif" }}
-                    >
-                      {exp.role}
-                    </p>
-                    <div className="flex items-center gap-1.5 mt-2 overflow-hidden">
-                      {exp.technologies.slice(0, 2).map((t) => (
-                        <span
-                          key={t}
-                          className="text-[10px] px-2 py-0.5 rounded-md bg-white/10 text-white/80 border border-white/15 truncate"
-                          style={{ fontFamily: "var(--font-mono), 'JetBrains Mono', monospace" }}
-                        >
-                          {t}
+                    {/* Right Half: Content Info */}
+                    <div className="sm:col-span-6 p-5 sm:p-7 md:p-8 flex flex-col justify-between bg-neutral-900/95 sm:bg-transparent">
+                      <div>
+                        <span className="text-[11px] font-bold text-red-500 uppercase tracking-widest block mb-1">
+                          {exp.period}
                         </span>
-                      ))}
-                      {exp.technologies.length > 2 && (
-                        <span className="text-[10px] text-white/50">+{exp.technologies.length - 2}</span>
-                      )}
+                        <h3
+                          className="text-lg sm:text-xl md:text-2xl font-bold text-white leading-snug line-clamp-2"
+                          style={{ fontFamily: "'Inter', sans-serif" }}
+                        >
+                          {exp.organization}
+                        </h3>
+                        <p className="text-xs sm:text-sm font-semibold text-neutral-300 mt-1">
+                          {exp.role}
+                        </p>
+                        <p
+                          className="text-xs sm:text-sm text-neutral-300/85 mt-2 leading-relaxed line-clamp-2 font-normal"
+                          style={{ fontFamily: "'Inter', sans-serif" }}
+                        >
+                          {exp.summary}
+                        </p>
+                      </div>
+
+                      {/* Pill Button "View detail" + Circular arrow button */}
+                      <div className="flex items-center gap-2.5 mt-4 pt-3 border-t border-white/10 sm:border-t-0 sm:pt-0">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setModalExp(exp);
+                          }}
+                          className="px-6 py-2.5 rounded-full bg-white text-black font-semibold text-xs sm:text-sm tracking-normal shadow-lg hover:bg-neutral-200 transition-all duration-200 cursor-pointer italic"
+                          style={{ fontFamily: "'Inter', sans-serif" }}
+                        >
+                          View detail
+                        </button>
+
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setModalExp(exp);
+                          }}
+                          aria-label="Open experience modal"
+                          className="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center shadow-lg hover:bg-neutral-200 transition-all duration-200 cursor-pointer"
+                        >
+                          <svg className="w-4 h-4 stroke-current fill-none stroke-[2.5]" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                          </svg>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -245,108 +283,33 @@ export default function ExperienceSection() {
             })}
           </div>
 
-          {/* Quick Deck Switcher Controls */}
-          <div className="flex items-center gap-3 mt-8">
-            {experiences.map((exp, idx) => (
-              <button
-                key={exp.id}
-                onClick={() => setActiveIdx(idx)}
-                className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 cursor-pointer ${
-                  activeIdx === idx
-                    ? 'bg-red-600 text-white shadow-[0_0_15px_rgba(220,38,38,0.5)]'
-                    : 'bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-white'
-                }`}
-                style={{ fontFamily: "'Inter', sans-serif" }}
-              >
-                {exp.organization}
-              </button>
-            ))}
-          </div>
+          {/* Circular Right Arrow Button */}
+          <button
+            onClick={() => setActiveIdx((prev) => (prev === experiences.length - 1 ? 0 : prev + 1))}
+            aria-label="Next experience"
+            className="absolute right-1 sm:right-2 md:right-6 z-30 w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-black/40 hover:bg-black/70 border border-white/20 hover:border-white/50 text-white flex items-center justify-center backdrop-blur-md transition-all duration-300 active:scale-95 shadow-xl cursor-pointer"
+          >
+            <svg className="w-5 h-5 sm:w-6 sm:h-6 stroke-current fill-none stroke-[2.5]" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
         </div>
 
-        {/* ── Mobile & Tablet Horizontal Snap Carousel ── */}
-        <div className="lg:hidden w-full overflow-x-auto pb-4 pt-2 -mx-4 px-4 flex gap-4 snap-x snap-mandatory scrollbar-none">
-          {experiences.map((exp) => (
-            <div
-              key={exp.id}
-              onClick={() => setModalExp(exp)}
-              className={`relative shrink-0 w-[84vw] max-w-[320px] rounded-[24px] p-5 cursor-pointer border border-white/20 shadow-xl flex flex-col justify-between overflow-hidden bg-gradient-to-b ${exp.cardColor} snap-center`}
-            >
-              {/* Top Bar: Title & Pill Chip */}
-              <div className="flex items-start justify-between gap-3 mb-3">
-                <div>
-                  <h3
-                    className="text-lg font-bold text-white tracking-wide line-clamp-1"
-                    style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700 }}
-                  >
-                    {exp.organization}
-                  </h3>
-                  <p
-                    className="text-[10px] text-white/70 uppercase tracking-widest mt-0.5 font-medium"
-                    style={{ fontFamily: "'Inter', sans-serif" }}
-                  >
-                    {exp.badgeTag}
-                  </p>
-                </div>
-
-                <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white text-xs font-semibold shrink-0">
-                  <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                  <span style={{ fontFamily: "var(--font-mono), 'JetBrains Mono', monospace" }}>
-                    {exp.statBadge}
-                  </span>
-                </div>
-              </div>
-
-              {/* Artwork Container */}
-              <div className="relative w-full h-[175px] rounded-xl overflow-hidden border border-white/10 mb-3">
-                <Image
-                  src={exp.image}
-                  alt={exp.organization}
-                  fill
-                  unoptimized={true}
-                  className="object-cover object-center"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                <div className="absolute bottom-2 left-2.5 right-2.5 flex items-center justify-between">
-                  <span
-                    className="text-[10px] text-white/90 font-medium px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-sm border border-white/15"
-                    style={{ fontFamily: "var(--font-mono), 'JetBrains Mono', monospace" }}
-                  >
-                    {exp.period}
-                  </span>
-                  <span className="text-[10px] text-red-400 font-semibold uppercase tracking-wider">
-                    Tap for details
-                  </span>
-                </div>
-              </div>
-
-              {/* Role & Scope */}
-              <div className="pt-2 border-t border-white/15">
-                <p
-                  className="text-xs font-semibold text-white line-clamp-1"
-                  style={{ fontFamily: "'Inter', sans-serif" }}
-                >
-                  {exp.role}
-                </p>
-                <div className="flex flex-wrap items-center gap-1 mt-2">
-                  {exp.technologies.slice(0, 3).map((t) => (
-                    <span
-                      key={t}
-                      className="text-[9px] px-2 py-0.5 rounded-md bg-white/10 text-white/80 border border-white/15"
-                      style={{ fontFamily: "var(--font-mono), 'JetBrains Mono', monospace" }}
-                    >
-                      {t}
-                    </span>
-                  ))}
-                  {exp.technologies.length > 3 && (
-                    <span className="text-[9px] text-white/50">+{exp.technologies.length - 3}</span>
-                  )}
-                </div>
-              </div>
-            </div>
+        {/* Carousel Pagination Dots */}
+        <div className="flex items-center justify-center gap-2 mt-4 sm:mt-6">
+          {experiences.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setActiveIdx(i)}
+              aria-label={`Go to experience ${i + 1}`}
+              className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                i === activeIdx
+                  ? 'w-7 bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.8)]'
+                  : 'w-2 bg-neutral-800 hover:bg-neutral-600'
+              }`}
+            />
           ))}
         </div>
-
       </div>
 
       {/* ── Interactive Detail Modal When a Card Is Clicked ── */}

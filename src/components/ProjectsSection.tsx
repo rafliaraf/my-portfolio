@@ -174,56 +174,45 @@ export default function ProjectsSection() {
 
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14" data-aos="zoom-in">
-          <p
-            className="text-xs sm:text-sm font-semibold text-red-500 uppercase mb-2 tracking-[0.1em]"
-            style={{ letterSpacing: '0.1em' }}
-          >
-            Systems &amp; Architecture
-          </p>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/[0.04] border border-white/10 backdrop-blur-md mb-3">
+            <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+            <span
+              className="text-[11px] sm:text-xs font-semibold text-neutral-300 uppercase tracking-widest"
+              style={{ fontFamily: "'Syne', sans-serif" }}
+            >
+              Systems &amp; Architecture
+            </span>
+          </div>
           <h2
             className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight"
             style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700 }}
           >
-            Featured Back-End Projects
+            Featured Web &amp; Engineering Projects
           </h2>
           <p
-            className="text-sm sm:text-base text-[#B3B3B3] font-normal mt-3 max-w-2xl mx-auto leading-[1.65]"
+            className="text-sm sm:text-base text-neutral-300/80 font-normal mt-3 max-w-2xl mx-auto leading-[1.65]"
             style={{ fontFamily: "'Inter', sans-serif" }}
           >
-            A collection of back-end services, API test suites, and public sector projects I have worked on. Click any card for details.
+            A collection of web applications, public sector platforms, and robust API architectures I have engineered. Click any project for technical specifications.
           </p>
         </div>
 
-        {/* ── 3D Coverflow Showcase (Landscape) ── */}
-        <div
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-          className="relative w-full max-w-6xl mx-auto flex items-center justify-center min-h-[320px] sm:min-h-[400px] md:min-h-[460px] touch-pan-y"
-        >
-          {/* Left Red Arrow */}
+        {/* ── Featured Wide Showcase Carousel (Matching Reference Screenshot) ── */}
+        <div className="relative w-full max-w-6xl mx-auto flex items-center justify-center min-h-[360px] sm:min-h-[420px] md:min-h-[460px]">
+          {/* Circular Left Arrow Button (Bordered, semi-transparent) */}
           <button
-            onClick={(e) => {
-              e.stopPropagation();
-              prevSlide();
-            }}
+            onClick={prevSlide}
             aria-label="Previous project"
-            className="absolute left-0.5 sm:left-3 md:left-6 z-30 p-2 sm:p-3 text-red-500 hover:text-red-400 active:scale-95 transition-all duration-300 drop-shadow-[0_0_12px_rgba(239,68,68,0.8)] cursor-pointer"
+            className="absolute left-1 sm:left-2 md:left-6 z-30 w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-black/40 hover:bg-black/70 border border-white/20 hover:border-white/50 text-white flex items-center justify-center backdrop-blur-md transition-all duration-300 active:scale-95 shadow-xl cursor-pointer"
           >
-            <svg
-              className="w-7 h-7 sm:w-10 sm:h-10 stroke-current fill-none stroke-[3]"
-              viewBox="0 0 24 24"
-            >
+            <svg className="w-5 h-5 sm:w-6 sm:h-6 stroke-current fill-none stroke-[2.5]" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
           </button>
 
-          {/* Cards Stage with Perspective */}
-          <div
-            className="relative w-full h-[280px] sm:h-[350px] md:h-[400px] flex items-center justify-center"
-            style={{ perspective: '1200px' }}
-          >
+          {/* Slider Stage Container */}
+          <div className="relative w-full h-[360px] sm:h-[400px] md:h-[420px] flex items-center justify-center overflow-hidden">
             {projects.map((project, idx) => {
-              // Calculate shortest circular offset distance (-1, 0, 1, etc.)
               let offset = idx - currentIndex;
               if (offset > total / 2) offset -= total;
               if (offset < -total / 2) offset += total;
@@ -231,47 +220,30 @@ export default function ProjectsSection() {
               const isCenter = offset === 0;
               const isPrev = offset === -1;
               const isNext = offset === 1;
-              const isVisible = Math.abs(offset) <= 2;
+              const isVisible = Math.abs(offset) <= 1;
 
               if (!isVisible) return null;
 
-              // Compute transforms for the 3D coverflow effect
               let translateX = '0%';
-              let scale = 0.7;
-              let zIndex = 5;
-              let opacity = 0;
-              let rotateY = 0;
+              let scale = 0.85;
+              let zIndex = 10;
+              let opacity = 0.28;
 
               if (isCenter) {
                 translateX = '0%';
                 scale = 1;
-                zIndex = 20;
+                zIndex = 25;
                 opacity = 1;
-                rotateY = 0;
               } else if (isPrev) {
-                translateX = '-55%';
-                scale = 0.82;
-                zIndex = 10;
-                opacity = 0.85;
-                rotateY = 14;
+                translateX = '-68%';
+                scale = 0.88;
+                zIndex = 15;
+                opacity = 0.28;
               } else if (isNext) {
-                translateX = '55%';
-                scale = 0.82;
-                zIndex = 10;
-                opacity = 0.85;
-                rotateY = -14;
-              } else if (offset === -2) {
-                translateX = '-95%';
-                scale = 0.68;
-                zIndex = 5;
-                opacity = 0.35;
-                rotateY = 22;
-              } else if (offset === 2) {
-                translateX = '95%';
-                scale = 0.68;
-                zIndex = 5;
-                opacity = 0.35;
-                rotateY = -22;
+                translateX = '68%';
+                scale = 0.88;
+                zIndex = 15;
+                opacity = 0.28;
               }
 
               return (
@@ -285,52 +257,76 @@ export default function ProjectsSection() {
                     }
                   }}
                   style={{
-                    transform: `translateX(${translateX}) scale(${scale}) rotateY(${rotateY}deg)`,
+                    transform: `translateX(${translateX}) scale(${scale})`,
                     zIndex,
                     opacity,
-                    transition: 'all 0.5s cubic-bezier(0.25, 1, 0.5, 1)',
+                    transition: 'all 0.6s cubic-bezier(0.25, 1, 0.5, 1)',
                   }}
-                  className={`absolute w-[84vw] max-w-[340px] sm:w-[460px] sm:max-w-none md:w-[560px] lg:w-[620px] aspect-[16/10] cursor-pointer group transition-all duration-500 rounded-xl overflow-hidden ${
+                  className={`absolute w-[92vw] max-w-[420px] sm:max-w-[560px] md:max-w-[700px] lg:max-w-[760px] h-[340px] sm:h-[370px] md:h-[390px] rounded-[32px] sm:rounded-[36px] overflow-hidden cursor-pointer transition-all duration-500 border ${
                     isCenter
-                      ? 'border-[3px] border-red-600 shadow-[0_0_40px_rgba(220,38,38,0.45)]'
-                      : 'border-2 border-red-600/70 brightness-75 hover:brightness-100 hover:border-red-500 shadow-[0_0_20px_rgba(220,38,38,0.2)]'
+                      ? 'border-white/20 shadow-[0_20px_60px_rgba(0,0,0,0.85)] bg-neutral-900/90 backdrop-blur-xl'
+                      : 'border-white/10 shadow-2xl bg-neutral-950/80 pointer-events-auto'
                   }`}
                 >
-                  {/* Landscape Image Container */}
-                  <div className="relative w-full h-full bg-neutral-900 flex items-center justify-center overflow-hidden">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      loading={idx === 0 ? "eager" : "lazy"}
-                      className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                    />
+                  {/* Split Layout: Left Image + Right Content */}
+                  <div className="w-full h-full grid grid-cols-1 sm:grid-cols-12 relative">
+                    {/* Left Half: Aesthetic Image Graphic */}
+                    <div className="sm:col-span-6 relative h-[160px] sm:h-full bg-neutral-950 overflow-hidden">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t sm:bg-gradient-to-r from-transparent via-black/20 to-neutral-900/90 sm:to-neutral-900" />
+                    </div>
 
-                    {/* Dark gradient for title legibility */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90 group-hover:opacity-75 transition-opacity pointer-events-none" />
-
-                    {/* Overlay Info */}
-                    <div className="absolute bottom-0 inset-x-0 p-4 sm:p-5 flex flex-col justify-end text-left z-10 pointer-events-none">
-                      <span
-                        className="text-[10px] sm:text-xs font-semibold uppercase text-red-400 mb-1 line-clamp-1 tracking-[0.1em]"
-                        style={{ letterSpacing: '0.1em' }}
-                      >
-                        {project.category}
-                      </span>
-                      <h3
-                        className="text-sm sm:text-base md:text-lg font-bold text-white leading-snug line-clamp-1 drop-shadow-md"
-                        style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700 }}
-                      >
-                        {project.title}
-                      </h3>
-                      {isCenter && (
-                        <p
-                          className="text-[11px] sm:text-xs text-[#B3B3B3] mt-1 line-clamp-1 font-normal leading-[1.6]"
+                    {/* Right Half: Content Info (Matching Reference Layout) */}
+                    <div className="sm:col-span-6 p-5 sm:p-7 md:p-8 flex flex-col justify-between bg-neutral-900/95 sm:bg-transparent">
+                      <div>
+                        {/* Title with Courier/Sans Tech Look */}
+                        <h3
+                          className="text-lg sm:text-xl md:text-2xl font-bold text-white leading-snug line-clamp-2"
                           style={{ fontFamily: "'Inter', sans-serif" }}
                         >
-                          {project.company}
+                          {project.title}
+                        </h3>
+
+                        {/* Description Paragraph */}
+                        <p
+                          className="text-xs sm:text-sm text-neutral-300/85 mt-2.5 sm:mt-3 leading-relaxed line-clamp-3 font-normal"
+                          style={{ fontFamily: "'Inter', sans-serif" }}
+                        >
+                          {project.description}
                         </p>
-                      )}
+                      </div>
+
+                      {/* Pill Button "View detail" + Circular arrow button */}
+                      <div className="flex items-center gap-2.5 mt-4 pt-3 border-t border-white/10 sm:border-t-0 sm:pt-0">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedProject(project);
+                          }}
+                          className="px-6 py-2.5 rounded-full bg-white text-black font-semibold text-xs sm:text-sm tracking-normal shadow-lg hover:bg-neutral-200 transition-all duration-200 cursor-pointer italic"
+                          style={{ fontFamily: "'Inter', sans-serif" }}
+                        >
+                          View detail
+                        </button>
+
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedProject(project);
+                          }}
+                          aria-label="Open project modal"
+                          className="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center shadow-lg hover:bg-neutral-200 transition-all duration-200 cursor-pointer"
+                        >
+                          <svg className="w-4 h-4 stroke-current fill-none stroke-[2.5]" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                          </svg>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -338,47 +334,32 @@ export default function ProjectsSection() {
             })}
           </div>
 
-          {/* Right Red Arrow */}
+          {/* Circular Right Arrow Button (Bordered, semi-transparent) */}
           <button
-            onClick={(e) => {
-              e.stopPropagation();
-              nextSlide();
-            }}
+            onClick={nextSlide}
             aria-label="Next project"
-            className="absolute right-0.5 sm:right-4 md:right-8 z-30 p-2 sm:p-3 text-red-500 hover:text-red-400 active:scale-95 transition-all duration-300 drop-shadow-[0_0_12px_rgba(239,68,68,0.8)] cursor-pointer"
+            className="absolute right-1 sm:right-2 md:right-6 z-30 w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-black/40 hover:bg-black/70 border border-white/20 hover:border-white/50 text-white flex items-center justify-center backdrop-blur-md transition-all duration-300 active:scale-95 shadow-xl cursor-pointer"
           >
-            <svg
-              className="w-7 h-7 sm:w-10 sm:h-10 stroke-current fill-none stroke-[3]"
-              viewBox="0 0 24 24"
-            >
+            <svg className="w-5 h-5 sm:w-6 sm:h-6 stroke-current fill-none stroke-[2.5]" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
           </button>
         </div>
 
-        {/* ── Carousel Pagination Indicators ── */}
-        <div className="mt-8 flex flex-col items-center justify-center gap-3" data-aos="fade-up">
-          <div className="flex items-center justify-center gap-2">
-            {projects.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setCurrentIndex(i)}
-                aria-label={`Go to slide ${i + 1}`}
-                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
-                  i === currentIndex
-                    ? 'w-8 bg-red-600 shadow-[0_0_10px_rgba(239,68,68,0.8)]'
-                    : 'w-2 bg-neutral-800 hover:bg-neutral-600'
-                }`}
-              />
-            ))}
-          </div>
-          <p
-            className="text-xs text-neutral-400 font-normal tracking-wide flex items-center gap-1.5"
-            style={{ fontFamily: "'Inter', sans-serif" }}
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping inline-block" />
-            Click center card to view technical documentation &amp; details
-          </p>
+        {/* Carousel Pagination Dots */}
+        <div className="flex items-center justify-center gap-2 mt-4 sm:mt-6">
+          {projects.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentIndex(i)}
+              aria-label={`Go to project ${i + 1}`}
+              className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                i === currentIndex
+                  ? 'w-7 bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.8)]'
+                  : 'w-2 bg-neutral-800 hover:bg-neutral-600'
+              }`}
+            />
+          ))}
         </div>
       </div>
 

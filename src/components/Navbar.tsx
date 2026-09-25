@@ -56,8 +56,8 @@ export default function Navbar() {
       id="main-navbar"
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 select-none ${
         scrolled
-          ? 'bg-black/90 backdrop-blur-md border-b border-neutral-900/80 shadow-2xl py-3.5'
-          : 'bg-gradient-to-b from-black/90 via-black/40 to-transparent py-5'
+          ? 'bg-black/60 backdrop-blur-xl border-b border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.5)] py-3.5'
+          : 'bg-gradient-to-b from-black/70 via-black/20 to-transparent py-5'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">

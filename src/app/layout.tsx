@@ -27,8 +27,8 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Muhammad Rafli — Portfolio",
   description:
-    "Portfolio of Muhammad Rafli Aolia Ansori — Back-End Developer & API Integration Specialist.",
-  keywords: ["Muhammad Rafli", "Portfolio", "Back-End Developer", "API Testing", "Software Engineering"],
+    "Portfolio of Muhammad Rafli Aolia Ansori — Web Developer & Software Engineer.",
+  keywords: ["Muhammad Rafli", "Portfolio", "Web Developer", "Full Stack", "API Testing", "Software Engineering"],
   authors: [{ name: "Muhammad Rafli Aolia Ansori" }],
 };
 
