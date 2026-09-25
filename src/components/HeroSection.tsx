@@ -51,9 +51,9 @@ export default function HeroSection() {
 
           {/* Right Side: Senior Statement & Contact Me Button perfectly aligned horizontally with the text */}
           <div className="max-w-md w-full flex flex-col items-start md:items-end text-left md:text-right pointer-events-auto">
-            {/* Senior Developer Statement (English, clear contrast) */}
+            {/* Senior Developer Statement (English, clear contrast, justified text) */}
             <p
-              className="text-xs sm:text-sm md:text-[14px] text-neutral-300 font-normal leading-relaxed tracking-wide select-none mb-4 drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)]"
+              className="text-xs sm:text-sm md:text-[14px] text-neutral-300 font-normal leading-relaxed tracking-wide select-none mb-4 drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] text-justify"
               style={{ fontFamily: "'Inter', sans-serif" }}
             >
               Crafting scalable, high-performance web architectures with meticulous attention to clean code, seamless responsiveness, and immersive interactive design.
