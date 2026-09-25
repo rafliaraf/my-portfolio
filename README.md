@@ -1,4 +1,4 @@
-# Portfolio — Next.js
+# Portfolio - Next.js
 
 ![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=flat&logo=vercel)
 ![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat&logo=next.js)
