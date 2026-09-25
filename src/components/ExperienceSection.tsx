@@ -250,30 +250,17 @@ export default function ExperienceSection() {
                         </p>
                       </div>
 
-                      {/* Pill Button "View detail" + Circular arrow button */}
-                      <div className="flex items-center gap-2.5 mt-4 pt-3 border-t border-white/10 sm:border-t-0 sm:pt-0">
+                      {/* Red "View detail" Button */}
+                      <div className="flex items-center mt-4 pt-3 border-t border-white/10 sm:border-t-0 sm:pt-0">
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
                             setModalExp(exp);
                           }}
-                          className="px-6 py-2.5 rounded-full bg-white text-black font-semibold text-xs sm:text-sm tracking-normal shadow-lg hover:bg-neutral-200 transition-all duration-200 cursor-pointer italic"
+                          className="px-6 py-2.5 rounded-full bg-red-600 hover:bg-red-500 text-white font-semibold text-xs sm:text-sm tracking-normal shadow-[0_0_20px_rgba(220,38,38,0.5)] hover:shadow-[0_0_28px_rgba(239,68,68,0.8)] transition-all duration-300 cursor-pointer active:scale-95"
                           style={{ fontFamily: "'Inter', sans-serif" }}
                         >
                           View detail
-                        </button>
-
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setModalExp(exp);
-                          }}
-                          aria-label="Open experience modal"
-                          className="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center shadow-lg hover:bg-neutral-200 transition-all duration-200 cursor-pointer"
-                        >
-                          <svg className="w-4 h-4 stroke-current fill-none stroke-[2.5]" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                          </svg>
                         </button>
                       </div>
                     </div>
